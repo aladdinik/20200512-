@@ -1,0 +1,113 @@
+	/**************/
+	/*download create-react app or create SPA*/
+	/**************/
+/*includes react / react-dom / normalize.css / axios / redux / react-router-dom / react-redux / propTypes / serve / react-app-polyfill */
+
+	-CREATE A CREATE-REACT-APP (already setup with Jest) :=
+npx create-react-app cra01 && cd cra01 && npm install && npm i --save normalize.css && npm i --save serve && npm i --save axios && npm i react-app-polyfill && npm i --save prop-types && npm i --save react-router-dom && npm i --save redux && npm i --save react-redux && npm update && npm audit fix && exit
+
+	-OR NON SPA SET UP OR A DIFFERENT SPA FROM CRA (includes react & react-dom in installation but you might need babel too, so research that) / (likely no unit testing will be set up so set one up you like to use) / (you might want to think about react-app-polyfill if it applies) :=
+npm install && npm i react && react-dom && npm i --save normalize.css && npm i --save serve && npm i --save axios && npm i react-app-polyfill && npm i --save prop-types && npm i --save react-router-dom && npm i --save redux && npm i --save react-redux && npm update && npm audit fix && exit
+
+
+	/**************/
+/* Include your src folder and updating package.json with npm run ikupdate */
+	/**************/
+	1+ in script include if not already done so:
+"ikupdate": "npm install && npm update && npm audit fix && exit",
+"ikserve": "serve -s build"
+	=eg. as this will allow you to serve your build folder after you use npm run build.
+	
+	+\ your src folder should includes css / js / apiKeys / test / iKapKe / etc...
+
+
+	/**************/
+/* Replace this <noscript> code on the index.html page. : */
+	/**************/
+	+\ if not already done so.
+<noscript style="border: red 2px solid; font-weight: bolder; padding-bottom: 4px;">For full functionality of this site it is necessary to enable JavaScript to its normal settings. Here are the <a href="https://www.enable-javascript.com/" target="_blank">instructions how to enable JavaScript in your web browser</a>.</noscript>
+
+
+	/**************/
+/*All the import and export */
+	/**************/
+/*for nodejs it would be different but mostly the same thing too.
++\ I left out jest because it was already set up in cra. 
+	+\ but for other spa you will need to install in and answer a series of questions it has for you to use it accordingly.
+	+\ I also left out mocha/chai/sinon since I will rarely use it now, but always keep it in mind. */
+
+import 'react-app-polyfill/ie11'; 
+import 'normalize.css';
+import './css/oikGrid.css';
+import './index.css';
+import App from './App/App';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import { BrowserRouter, Route } from 'react-router-dom'; 
+import { createStore } from 'redux';
+import { Provider, ReactReduxContext } from 'react-redux';
+import axios from 'axios';
+
+/*import all these especially for index.js */
+
+
+	/**************/
+/*jest unit testing */
+	/**************/
+
++\  create a new folder just for test. And move App.test.js into it.
+	+\  you can rename it or modify it as you see fit.
+	+\  iK try using the default jest unit testing. But if you cannot than you can do install chai and sinon to make it easier for you.
+		+\  not ideal to use mocha yet, since you have to npm run eject create react app.
+	+\  copy and paste the test syntax structure from your file so that you have a good idea what the test structure could be like first, plus saving you time typing.
+
+
+	/**************/
+/* .gitignore the api key .js file */
+	/**************/
+iKapKe/
+
+
+
+
+	/**************/
+/*If you want browser support for IE11 (and maybe IE9 and IE10) */
+	/**************/
+1+ npm install react-app-polyfill
+2+ import 'react-app-polyfill/ie11';   =VIP on the first line of ./src/index.js
+	+\  if you also want IE9 and IE10 support than replace "ie11" with "ie9" as this will support all three IE.
++\ if you want language features than check their page for code as it does the same thing but some other things to which I do not know much about, however their was some inconsistency which is why I did not include it here, iK read my note3 docs for more details.
+
+
+	/**************/
+/* Using your kIK.js personal js codes */
+	/**************/
++\  if you want to use your personal js file kiK.js , than include it in the ./src folder .
+	1+ Put export in the kiK.js file
+		+\  eg. export const IK = (function(root) { …
+	2+ import {IK} from './kiK.js';  on whatever .js file you want to use it on.
+	+\  BIM however it is probably best not to include it in your project as you will likely not be using all those function. 
+		+\  so it is best recommended to take snippets codes for when you need them.
+
+	/**************/
+/* favicon.ico and logo192 file for <title> */
+	/**************/
+1+ ./public folder replace favicon.ico file with an image you want for the <title> . Do so by renaming the image file favicon.ico
+2+ check ./public/manifest.json file and make sure favicon.ico section details is correct.
++\  do the same for logo192.png file too.
++\  iK? I think you could remove ./public/logo512.png file since I do not know what it is doing.
+
+
+
+
+	/**************/
+/* */
+	/**************/
+
+	/**************/
+/* */
+	/**************/
+
+
+

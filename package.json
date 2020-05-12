@@ -1,0 +1,29 @@
+{
+  "name": "ik_copy_project",
+  "version": "1.0.0",
+  "description": "COPY PROJECT",
+  "main": "01.html",
+  "scripts": {
+    "test": "mocha",
+    "watch": "mocha --watch ./test ./",
+    "brow": "browserify ./*.js -o ./iKjs.js",
+    "ikupdate": "npm install && npm update && npm audit fix && exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ikaladdin@bitbucket.org/ikaladdin/20200101-npmbasic.git"
+  },
+  "author": "i k",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/ikaladdin/20200101-npmbasic#readme",
+  "devDependencies": {
+    "chai": "~4.2.0",
+    "jest": "^25.1.0",
+    "mocha": "^7.0.1",
+    "sinon": "^8.1.1",
+    "sinon-chai": "~3.4.0"
+  },
+  "dependencies": {
+    "browserify": "~16.5.0"
+  }
+}
