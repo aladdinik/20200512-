@@ -57,43 +57,45 @@
 'use strict';
 
 
-/* */
-/* iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
+/*Simple example of using a google (youtube) api */
+/*I am using the /search endpoint for youtube which allows me to use search youtube videos and properties.
++\ iKBIM there are plenty of params , but I only used the one I think I will likely use the most, but check youtube api documentation for more params.
++\ 
++\ 
 +\ 
 */
 
-	/******/
-	/*App.js file*/
-	/******/
+axios.get('https://www.googleapis.com/youtube/v3/search', { /*1+*/
+	params: {
+		part: "snippet", /*2+*/
+		maxResults: 5,
+		q: "cheetah",	/*3+*/
+		key: "AIzaSyB5JZ-_sj25aHuRhEzD8THMhPR2TkVVBns" /*4+*/
+	}
+})
+	.then(iKresponse => {
+		console.log(iKresponse);  /*OP youtube object */ /*5+*/
+	})
 
 
-	
-	/******/
-	/*IkFile1.js file*/
-	/******/
 
 
-
-	/******/
-	/*IkFile2.js file*/
-	/******/
-
-
-	/******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
-
-ReactDOM.render(<App />, document.getElementById('root'));
-
-
-/*1+
-2+
-3+
-4+
-5+
+/*1+ /search is the endpoint we are using but there are plenty of other youtube api you can use.
+2+ is a required parameter
+	+\ iK? "snippet" is just for basic details about the search result which you can use collect data about the search result.
+3+ q for you search text for the youtube you want.
+4+ VIP you get the api key from google.api (console.developers.google.com) account (you will need to sign in to your google account and create a new credentials).
+	+\ BIM you will need to create a new (or existing) project in the account and gain api key for the specific google content api (youtube) you would like to use.
+		+\ you can even restrict your api key for only specific urls that you want to use your api key on, preventing anyone to use your api key on other sites.
+5+ Some key properties you will likely use a lot:
+	+\ iKresponse.data.items  =eg. this provide an array of individual youtube search object with many properties you can use.
+	+\ iKresponse.items[iKindex].id.videoId   =eg. VIP this is the id (for your specific youtube video) you need to use as src for video / iframe etc...
+		+\	%%%%%
+`https://www.youtube.com/watch?v=${iKreponse.items[iKindex].id.videoId}`
+		=eg. iK so it appears 'v' is a parameter to use for specific youtube video.
+			+\ `https://www.youtube.com/watch?v=pkhE14Rou-E`  =eg.
+		+\ you could use this as 'id' for react list 'key' props
+	+\ iKresponse.data.items.snippet  =eg. this contain some good properties you can use, such as description, thumbnails and etc... 
 6+
 7+
 8+
