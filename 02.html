@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>02 Simple example of using a google (youtube) api</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -76,8 +76,6 @@ axios.get('https://www.googleapis.com/youtube/v3/search', { /*1+*/
 	.then(iKresponse => {
 		console.log(iKresponse);  /*OP youtube object */ /*5+*/
 	})
-
-
 
 
 /*1+ /search is the endpoint we are using but there are plenty of other youtube api you can use.

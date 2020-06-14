@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>03 Simple use of react-redux / name list, and clicking on name to be selected and shown / <Provider> / connect()() / mapStateToProps</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -57,148 +57,151 @@
 'use strict';
 
 
-/*Basic react-redux / create a name list and selecting names */
-/* iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
+/*Simple use of react-redux / name list, and clicking on name to be selected and shown / <Provider> / connect()() / mapStateToProps */
+/*There are two state, one with name list, and the other is the selected name chosen by user clicking on the name.
++\ react-redux is a separate library specifically to connect react and redux to work together.
 +\ 
-
-
-zzzzzzzz
-I think I did thinks correctly but some reason connect()() is not displaying the props to KnameList component, which I cannot understand.??????????
-
-
++\ 
++\ 
 */
 
-//console.clear();
+	/******/
+	/*iKactionCreators.js file*/
+	/******/
+/*1+*/
 
-	/******/
-	/*iKactionType.js file*/
-	/******/
-const iKselectedName = iKnameP => ({
-	type: "IKSELECTEDNAME",
+const iKselectedNameActionCreator = iKnameP => ({
+	type: "IKSELECTED_NAME",
 	payload: iKnameP
 });
 
 
 	/******/
-	/*iKactionCreator.js file*/
-	/******/
-
-	/******/
 	/*iKreducers.js file*/
 	/******/
-const iKnames = [
-	{
-		"name": "Alpha"
-	},
-	{
-		"name": "Bravo"
-	},
-	{
-		"name": "Charlie"
-	}
-]; /*END iKnames */
-
-const iKnameListReducer = () => iKnames;
+const iKnameListReducer = () => [ /*2+*/
+	{"name": "Alpha"},
+	{"name": "Bravo"},
+	{"name": "Charlie"}
+]; /*END iKnameListReducer */
 
 const iKselectedNameReducer = (iKstate = null, iKaction) => {
 	switch (iKaction.type) {
-		case "IKSELECTEDNAME":
+		case "IKSELECTED_NAME":
 			return iKaction.payload;
 		default:
 			return iKstate;
 	};
 }; /*END iKselectedNameReducer */
 
+
 	/******/
 	/*App.js file*/
 	/******/
-const App = () => {
-	return (
-		<div>
-			<KnameListConnect />
-			<br />
-			<KselectedName />
-		</div>
-	);
-}; /*END App */
+const App = () => (
+	<div>
+		<KnameListConnect />
+		<KselectedNameConnect />
+	</div>
+); /*END App */
 
 
 	/******/
 	/*KnameListConnect.js file*/
 	/******/
-const {connect} = ReactRedux;
+const {connect} = ReactRedux; /*3+*/
 
-const KnameList = props => {
+const KnameListComponent = props => {
+	console.log(props); /*OP: three props object which is iKlistOfNames, iKownProps, iKselectedNameActionCreator() */
 
-	console.log(props);
+	return props.iKlistOfNames.map(iKitem => ( /*4+*/
+		<h4
+			onClick={() => props.iKselectedNameActionCreator(iKitem.name)} /*5+*/
+		>
+			{iKitem.name}
+		</h4>
+	));
+}; /*END KnameListComponent */
 
-	return props.iKlistOfNames.map(iKitem => {
-		return <h4 onClick={iKselectedName(iKitem.name)} >{iKitem.name}</h4>;
-	});
-}; /*END KnameList */
+const mapStateToProps1 = (iKstate, iKownProps) => ({ /*6+*/
+	iKlistOfNames: iKstate.iKnameListReducer, /*7+*/
+	iKownProps /*8+*/
+});
 
-const mapStateToProps1 = (iKstate, iKownProps) => {
-	return {
-		iKlistOfNames: iKstate.iKnameListReducer,
-		iKownProps
-	}
-};
-
-const KnameListConnect = connect(mapStateToProps1)(KnameList);
+const KnameListConnect = connect( /*9+*/
+	mapStateToProps1,
+	{iKselectedNameActionCreator} /*10+*/
+)(KnameListComponent); /*11+*/
 
 
 	/******/
 	/*KselectedNameConnect.js file*/
 	/******/
-const KselectedName = props => {
-	return (
-		<div>KselectedName component</div>
-	);
-}; /*END KselectedName */
+const KselectedNameComponent = props => {
+	if (props.iKselectedName === null) {
+		return <em>iK no clicked named selected yet!</em>;
+	};
 
-const mapStateToProps2 = iKstate => {
-	return {};
-};
+	return <code>{props.iKselectedName}</code>; /*12+*/
+}; /*END KselectedNameComponent */
 
+const mapStateToProps2 = iKstate => ({
+	iKselectedName: iKstate.iKselectedNameReducer
+});
+
+const KselectedNameConnect = connect (mapStateToProps2) (KselectedNameComponent);
 
 
 	/******/
 	/*index.js file*/
 	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
-const {combineReducers, createStore} = Redux;
-
+const {createStore, combineReducers} = Redux;
+const {Provider} = ReactRedux;
 
 const iKstore = createStore(
 	combineReducers({
 		iKnameListReducer,
 		iKselectedNameReducer
 	}),
-	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() 
+	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-const {Provider} = ReactRedux;
-
-ReactDOM.render(
-	<Provider store={iKstore}>
+ReactDOM.render( /*13+*/
+	<Provider store={iKstore} >
 		<App />
-	</Provider>,	
+	</Provider>,
 	document.getElementById('root')
 );
 
-
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
+/*1+ You will notice there is no action creator for the name list. That is because we are not trying to change the name list in this demo. We only changing the selected name when clicked.
+2+ The iKnameListReducer is a fixed array value, because for this demo we do not need to use conditional statement as we are not going to change the name list, it will stay as a fixed state value.
+3+ you would import connect()() for every file you use that you want to connect with the redux store.
+	+\ no prop drilling, just like react context api .
+4+ will return an array object of <h4> tag with the state name and a ready onClick event attach to it.
+4+ iK not sure why, but the console did not ask for key for each loop. However normally you should include it.
+5+ for every <h4> element, an onClick event is attach. Each onClick will trigger the action creator to assign the new name for the iKselectedNameReducer state.
+6+ mapStateToProps is used to turn the redux store state into props for the functional/class component.
+6+ mapStateToProps can be name anything you want but best to stick to standard.
+6+ iKstate is the redux store state, and the iKownProps is the normal props passing down to the component.
+7+ You can choose which data of state to pass to the component and name the property anything you want too.
+8+ BIM it is always wise to pass the iKownProps too as you will might have pass props to the component.
+	+\ however this is still optional.
+9+ VIP connect()() is essential for the component to connect the react with redux store state.
+	+\ you must use the double parenthesis, even if the first parenthesis is empty.
+	+\ BIM the first parenthesis is for mapStateToProps , action creators , etc...
+	+\ VIP the second parenthesis must have the component name included as that will be passed to the parent component.
+9+ VIP in spa you would export default connect()() and not the component itself.
+	+\ BIM but in normal html project, you must place the connect()() in a variable so that the parent component can use it as a component tag (eg. <KnameListConnect /> )
+10+ VIP the action creator must be wrapped in object literals.
+	+\ VIP the action creator will now be wrapped in redux dispatch method, so you can use the action creator as a normal function callback in the component.
+		+\ therefore you do not have to use the redux store .dispatch() method for the action creator in the component.
+	+\ iK? You could also use the mapDispatchToProps function structure, which I think is very similar to mapStateToProps .
+11+ VIP must include the component within the second parenthesis.
+12+ the selected name will show when you click on a name on the list.
+13+ <Provider> is part of react redux and should be placed as high as possible as you should use this to store all your redux store state.
+	+\ you must use the store prop keyword and include the createStore() within.
+14+
+15+
 */
 
 
