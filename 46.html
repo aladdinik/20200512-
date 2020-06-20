@@ -85,6 +85,15 @@
 //	import React from 'react';
 //	import ReactDOM from 'react-dom';
 //	import App from './App';
+const {createStore, applyMiddleware, compose} = Redux;
+const {Provider} = ReactRedux;
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const iKstore = createStore(
+	iKreducer1,
+	composeEnhancers(applyMiddleware(ReduxThunk.default))
+); /*END iKstore */
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

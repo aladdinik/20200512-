@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>04</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -50,157 +50,153 @@
 <script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+
+<!--1+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+
+
 <!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
 <script src="zIK/03JS/kiK.js" type="text/javascript"></script>
 <script type="text/babel">
 /* + + + + + + + + + + + SCRIPT --------------------------*/
 'use strict';
 
-/*IK SCRAPPED*/
-/*Basic react-redux / create a name list and selecting names */
-/* iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
+
+/*Simple use of Redux-Thunk / applyMiddleware() / mapDispatchToprops / Using asynchronous (GET request) code with redux to create random username */
+/*Using html project files in the demo. But Just remember to npm, import and export accordingly.
++\ In this demo I GET request random username, store it into redux store, and then display it on the page.
++\ Redux-Thunk is mainly for using asynchronous codes with redux.
+	+\ Because redux does not handle asynchronous codes accordingly. Mainly because of babel conversion library.
 +\ 
-
-
-zzzzzzzz
-I think I did thinks correctly but some reason connect()() is not displaying the props to KnameList component, which I cannot understand.??????????
-
-
++\ 
++\ 
 */
 
-//console.clear();
-
 	/******/
-	/*iKactionType.js file*/
+	/*iKactionCreators.js file*/
 	/******/
-const iKselectedName = iKnameP => ({
-	type: "IKSELECTEDNAME",
-	payload: iKnameP
-});
+const iKactionCreator1 = () => {
+	return async (iKdispatchP, iKgetStateP) => { /*2+*/
+		const iKresponse1 = await axios.get("https://randomuser.me/api");
 
-
-	/******/
-	/*iKactionCreator.js file*/
-	/******/
-
-	/******/
-	/*iKreducers.js file*/
-	/******/
-const iKnames = [
-	{
-		"name": "Alpha"
-	},
-	{
-		"name": "Bravo"
-	},
-	{
-		"name": "Charlie"
-	}
-]; /*END iKnames */
-
-const iKnameListReducer = () => iKnames;
-
-const iKselectedNameReducer = (iKstate = null, iKaction) => {
-	switch (iKaction.type) {
-		case "IKSELECTEDNAME":
-			return iKaction.payload;
-		default:
-			return iKstate;
+		return iKdispatchP({ /*3+*/
+			type: "GET_USERNAME",
+			payload: iKresponse1
+		});
 	};
-}; /*END iKselectedNameReducer */
+}; /*END iKactionCreator1 */
+
+
+	/******/
+	/*iKreducers1.js file*/
+	/******/
+const iKreducer1 = (iKinitialStateP = null, iKactionP) => {
+	switch (iKactionP.type) {
+		case "GET_USERNAME":
+			return iKactionP.payload;
+		default:
+			return iKinitialStateP;
+	};
+}; /*END iKreducer1 */
+
 
 	/******/
 	/*App.js file*/
 	/******/
-const App = () => {
-	return (
-		<div>
-			<KnameListConnect />
-			<br />
-			<KselectedName />
-		</div>
-	);
-}; /*END App */
+const App = () => (
+	<div>
+		<KgetRequestUserNameConnect />
+	</div>
+); /*END App */
 
 
 	/******/
-	/*KnameListConnect.js file*/
+	/*KgetRequestUserNameConnect.js file*/
 	/******/
 const {connect} = ReactRedux;
 
-const KnameList = props => {
+class KgetRequestUserNameComponent1 extends React.Component {
+	componentDidMount() {
+		this.props.iKDispatchActionCreator1(); /*4+*/
+	};
 
-	console.log(props);
+	render() {
+		console.log(this.props); /*5+*/
 
-	return props.iKlistOfNames.map(iKitem => {
-		return <h4 onClick={iKselectedName(iKitem.name)} >{iKitem.name}</h4>;
-	});
-}; /*END KnameList */
+		if (this.props.iKstoreStateProps === null) { /*6+*/
+			return <p>iK LOADING...</p>;
+		};
 
-const mapStateToProps1 = (iKstate, iKownProps) => {
+		return (
+			<h1>{this.props.iKstoreStateProps.data.results[0].login.username}</h1>
+		); /*OP You get a random username from the api */
+	};
+}; /*END KgetRequestUserNameComponent1 */
+
+const mapStateToProps1 = iKstate => ({
+	iKstoreStateProps: iKstate
+});
+
+const mapDispatchToProps = (iKdispatch, iKownProps) => { /*7+*/
 	return {
-		iKlistOfNames: iKstate.iKnameListReducer,
+		iKDispatchActionCreator1: () => iKdispatch( iKactionCreator1() ), /*8+*/
 		iKownProps
-	}
-};
+	};
+}; /*END mapDispatchToProps */
 
-const KnameListConnect = connect(mapStateToProps1)(KnameList);
-
-
-	/******/
-	/*KselectedNameConnect.js file*/
-	/******/
-const KselectedName = props => {
-	return (
-		<div>KselectedName component</div>
-	);
-}; /*END KselectedName */
-
-const mapStateToProps2 = iKstate => {
-	return {};
-};
-
+const KgetRequestUserNameConnect = connect(mapStateToProps1, mapDispatchToProps) (KgetRequestUserNameComponent1);
 
 
 	/******/
 	/*index.js file*/
 	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
-const {combineReducers, createStore} = Redux;
-
+const {createStore, applyMiddleware} = Redux;
+const {Provider} = ReactRedux;
 
 const iKstore = createStore(
-	combineReducers({
-		iKnameListReducer,
-		iKselectedNameReducer
-	}),
-	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() 
-);
-
-const {Provider} = ReactRedux;
+	iKreducer1,
+	applyMiddleware(ReduxThunk.default) /*9+*/
+); /*END iKstore */ /*10+*/
 
 ReactDOM.render(
 	<Provider store={iKstore}>
 		<App />
-	</Provider>,	
+	</Provider>,
 	document.getElementById('root')
-);
+); /*END ReactDOM.render */
 
-
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
+/*1+ redux-thunk library is very small.
+2+ VIP redux-thunk will halt dispatching the action creator and give you back control. It will determine if it is a returning object or a function.
+	+\ BIM Because of redux-thunk, your action creator can return either a object literal or anonymous function.
+	+\ if it is an object literal (action) than redux-thunk will let the action creator continue to be dispatch to the reducer as normal.
+		+\ So basically you can write normal action creator as you normally would do if you do not need to use redux-thunk.
+	+\ VIP If the action creator returns an anonymous function than you would need to use the anonymous function iKdispatchP() argument to dispatch the final object literal (action).
+		+\ This is part of the redux-thunk structure and is a must, especially if you are using asynchronous codes.
+		+\ iKgetStateP() argument allows you to gain access to the current redux store if you need to use, but it is optional.
+2+ I used async function as part of getting the GET request.
+	+\ BIM if I did not use the redux-thunk library, the action creator would send an error 'Error: Actions must be plain objects. Use custom middleware for async actions' .
+		+\ That is because babel library cannot convert react-redux asynchronous http request accordingly.
+			+\ babel would return the request response and not the action object literal you are seeking for.
+			+\ But redux-thunk pauses the dispatch to the reducer and lets you dispatch when the request is fully finish.
+3+ VIP you must insert the action (object literal) within the iKdispatch() , with its 'type' property as usual and any optionally payload property.
+4+ calling and dispatching the action creator with the asynchronous codes to the redux reducer and store.
+5+ There are three props: iKDispatchActionCreator1() / iKstoreStateProps / iKownProps .
+6+ VIP you must include a conditional statement for the initial state otherwise error will occur in the first react render.
+7+ mapDispatchToProps allows you to wrap multiple action creator within dispatch, for more convenience.
+7+ iKownProps is optional.
+8+ BIM to use iKdispatch() , you must wrap it wihin a anonymous function.
+	+\ alternatively you could use bindActionCreators() which can be even more convenient.
+9+ VIP To use Redux-thunk , you must insert it within the redux applyMiddleware() method.
+9+ BIM for spa you do not need to use .default for ReduxThunk property, it is just for html project.
+10+ iK you will notice I did not use the redux devtool extension.
+	+\ iK You would need to follow the redux devtool addional codes in their documentation to use it along with middleware.
+		+\ iK check online or your word doc for details.
+11+
+12+
+13+
+14+
+15+
 */
-
 
  /*OP */
 /* **** d */
