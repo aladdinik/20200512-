@@ -50,6 +50,7 @@
 <script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
 <!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
 <script src="zIK/03JS/kiK.js" type="text/javascript"></script>
 <script type="text/babel">
@@ -60,7 +61,18 @@
 /* */
 /* iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ 
+
+.find() 
+
 */
+
+const iKarray1 = ["iKaV1", "iKaV2", "iKaV3", 4, 5, 6];
+
+const iKfound = iKarray1.find((el, ind, arr) => {
+	return el ===6;
+});
+
+console.log(iKfound);
 
 	/******/
 	/*App.js file*/
@@ -86,7 +98,7 @@
 //	import ReactDOM from 'react-dom';
 //	import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//ReactDOM.render(<App />, document.getElementById('root'));
 
 
 /*1+

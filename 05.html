@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>05</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -50,6 +50,7 @@
 <script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
 <!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
 <script src="zIK/03JS/kiK.js" type="text/javascript"></script>
 <script type="text/babel">
@@ -57,48 +58,132 @@
 'use strict';
 
 
-/* */
-/* iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
+/*bindActionCreators() / redux devtool with middleware / axios create() / refactored GET request of username */
+/*iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
++\ iK It is the same project as 'EG. Simple use of Redux-Thunk' file. However its the refactored version along with some extras.
 +\ 
+
 */
+
+	/******/
+	/*iKaxiosCreate1.js file*/
+	/******/
+const iKaxiosCreate1 = axios.create({ /*1+*/
+	baseURL: 'https://randomuser.me', /*2+*/
+	timeout: 1000,	/*3+*/
+	responseType: 'json' /*4+*/
+}); /*END iKaxiosCreate1 */ /*5+*/
+
+
+	/******/
+	/*iKactionCreators1.js file*/
+	/******/
+const iKactionCreators1 = () => async iKdispatchP => {
+	const iKgetResponse1 = await iKaxiosCreate1.get('/api'); /*6+*/
+
+	iKdispatchP({
+		type: "GET_USERNAME",
+		payload: iKgetResponse1
+	});
+}; /*END iKactionCreators1 */
+
+
+	/******/
+	/*iKreducers1.js file*/
+	/******/
+const iKreducers1 = (iKinitialStateP = null, iKactionP) => {
+	switch (iKactionP.type) {
+		case "GET_USERNAME":
+			return iKactionP.payload;
+		default:
+			return iKinitialStateP;
+	};
+}; /*END iKreducers1 */
+
 
 	/******/
 	/*App.js file*/
 	/******/
-
-
-	
-	/******/
-	/*IkFile1.js file*/
-	/******/
-
+const App = () => (
+	<div>
+		<KgetRequestUserNameConnect1 />
+	</div>
+); /*END App */
 
 
 	/******/
-	/*IkFile2.js file*/
+	/*KgetRequestUserNameConnect1.js file*/
 	/******/
+const {connect} = ReactRedux;
+const {bindActionCreators} = Redux;
+
+class KgetRequestUserNameComponent1 extends React.Component {
+	componentDidMount() {
+		this.props.iKDispatchActionCreator1();
+	};
+
+	render () {
+		if (this.props.iKstoreStateProps === null) {
+			return <p>iK loading...</p>;
+		};
+
+		const iKuserName1 = this.props.iKstoreStateProps.data.results[0].login.username;
+
+		return <h1>{iKuserName1}</h1>;
+	};
+}; /*END KgetRequestUserNameComponent1 */
+
+const mapStateToProps1 = iKstateP => ({iKstoreStateProps: iKstateP});
+
+const mapDispatchToProps1 = iKdispatchP => ({
+	iKDispatchActionCreator1: bindActionCreators( iKactionCreators1, iKdispatchP ) /*7+*/
+});
+
+const KgetRequestUserNameConnect1 = connect(mapStateToProps1, mapDispatchToProps1) (KgetRequestUserNameComponent1);
 
 
 	/******/
 	/*index.js file*/
 	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
+const {createStore, applyMiddleware, compose} = Redux;
+const {Provider} = ReactRedux;
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; /*8+*/
 
+const iKstore1 = createStore(
+	iKreducers1,
+	composeEnhancers( /*9+*/
+		applyMiddleware(ReduxThunk.default)
+	)
+); /*END iKstore1 */
 
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
+ReactDOM.render(
+	<Provider store={iKstore1} >
+		<App />
+	</Provider>,
+	document.getElementById('root')
+); /*END ReactDOM.render */
+
+/*1+ axios.create() is great to use on a separate file just for api's you will be using often. You write the request settings of the api url's and only type the End Point (pathname) on the actual code file you will be using it on, which could make your code looking more cleaner, shorter and neater.
+2+ write down the base of the api url you will be using often.
+3+ set a time limit for the request.
+4+ type of file you want in the response.
+	+\ However 'json' is the default settings so there was no need to write this, just for demo purposes.
+5+ iK there are plenty of other property settings you could use. Check online for more details if you want.
+6+ Using the axios.create() request settings makes your code easier to read.
+	+\ VIP you put the End Point (pathname) in the .get() method to complete the full api url request.
+	+\ BIM you could further modify the request setting if you needed to.
+7+ bindActionCreators() does the same thing as the anonymous function, which sets up dispatch for the action creator. It just a slightly convenient code.
+	+\ iK? I suspect you could also use bindActionCreators() within the component function.
+8+ code is from redux devtool if you want to use middleware also.
+9+ You insert the middleware within the composeEnhancers() callback as instructed by the redux devtool.
+	+\ iK? I think you can all multiple middleware with ,comma .
 10+
+11+
+12+
+13+
+14+
+15+
 */
 
 

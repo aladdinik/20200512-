@@ -62,26 +62,25 @@
 'use strict';
 
 
-/*Simple use of Redux-Thunk / applyMiddleware() / mapDispatchToprops / Using asynchronous (GET request) code with redux to create random username */
-/*Using html project files in the demo. But Just remember to npm, import and export accordingly.
+/*Simple use of Redux-Thunk / applyMiddleware() / mapDispatchToProps / Using asynchronous (GET request) code with redux to create random username */
+/*iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 +\ In this demo I GET request random username, store it into redux store, and then display it on the page.
 +\ Redux-Thunk is mainly for using asynchronous codes with redux.
 	+\ Because redux does not handle asynchronous codes accordingly. Mainly because of babel conversion library.
 +\ 
 +\ 
-+\ 
 */
 
 	/******/
-	/*iKactionCreators.js file*/
+	/*iKactionCreators1.js file*/
 	/******/
 const iKactionCreator1 = () => {
 	return async (iKdispatchP, iKgetStateP) => { /*2+*/
-		const iKresponse1 = await axios.get("https://randomuser.me/api");
+		const iKgetResponse1 = await axios.get("https://randomuser.me/api");
 
 		return iKdispatchP({ /*3+*/
 			type: "GET_USERNAME",
-			payload: iKresponse1
+			payload: iKgetResponse1
 		});
 	};
 }; /*END iKactionCreator1 */
@@ -105,13 +104,13 @@ const iKreducer1 = (iKinitialStateP = null, iKactionP) => {
 	/******/
 const App = () => (
 	<div>
-		<KgetRequestUserNameConnect />
+		<KgetRequestUserNameConnect1 />
 	</div>
 ); /*END App */
 
 
 	/******/
-	/*KgetRequestUserNameConnect.js file*/
+	/*KgetRequestUserNameConnect1.js file*/
 	/******/
 const {connect} = ReactRedux;
 
@@ -124,7 +123,7 @@ class KgetRequestUserNameComponent1 extends React.Component {
 		console.log(this.props); /*5+*/
 
 		if (this.props.iKstoreStateProps === null) { /*6+*/
-			return <p>iK LOADING...</p>;
+			return <p>iK loading...</p>;
 		};
 
 		return (
@@ -137,14 +136,14 @@ const mapStateToProps1 = iKstate => ({
 	iKstoreStateProps: iKstate
 });
 
-const mapDispatchToProps = (iKdispatch, iKownProps) => { /*7+*/
+const mapDispatchToProps1 = (iKdispatch, iKownProps) => { /*7+*/
 	return {
 		iKDispatchActionCreator1: () => iKdispatch( iKactionCreator1() ), /*8+*/
 		iKownProps
 	};
-}; /*END mapDispatchToProps */
+}; /*END mapDispatchToProps1 */
 
-const KgetRequestUserNameConnect = connect(mapStateToProps1, mapDispatchToProps) (KgetRequestUserNameComponent1);
+const KgetRequestUserNameConnect1 = connect(mapStateToProps1, mapDispatchToProps1) (KgetRequestUserNameComponent1);
 
 
 	/******/
@@ -167,7 +166,7 @@ ReactDOM.render(
 
 /*1+ redux-thunk library is very small.
 2+ VIP redux-thunk will halt dispatching the action creator and give you back control. It will determine if it is a returning object or a function.
-	+\ BIM Because of redux-thunk, your action creator can return either a object literal or anonymous function.
+	+\ VIP Because of redux-thunk, your action creator can return either a object literal or anonymous function.
 	+\ if it is an object literal (action) than redux-thunk will let the action creator continue to be dispatch to the reducer as normal.
 		+\ So basically you can write normal action creator as you normally would do if you do not need to use redux-thunk.
 	+\ VIP If the action creator returns an anonymous function than you would need to use the anonymous function iKdispatchP() argument to dispatch the final object literal (action).
@@ -185,7 +184,7 @@ ReactDOM.render(
 7+ mapDispatchToProps allows you to wrap multiple action creator within dispatch, for more convenience.
 7+ iKownProps is optional.
 8+ BIM to use iKdispatch() , you must wrap it wihin a anonymous function.
-	+\ alternatively you could use bindActionCreators() which can be even more convenient.
+	+\ alternatively you could use bindActionCreators() .
 9+ VIP To use Redux-thunk , you must insert it within the redux applyMiddleware() method.
 9+ BIM for spa you do not need to use .default for ReduxThunk property, it is just for html project.
 10+ iK you will notice I did not use the redux devtool extension.
