@@ -58,33 +58,235 @@
 'use strict';
 
 
-/* */
+/*Saving requests calls by calling the same request only once for each data needed and storing it in redux store for reusage / action creator within action creator / .find() / iK blog post with authors name */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 
+
++\ There are two api request needed. First with the blog post which provide userId and the second api request contains the authors full details who wrote the post.
+	+\ The easy way is to request all the data for each post and authors separately, however performance wise, it is a lot of demand and in the real world this is not practical.
+		+\ Ideally you would want to make a request once for data you know you will be using, and avoid making the same request again if you need to use the same data again somewhere else.
+		+\ You would also only want to save the data that you use and discard everything else, especially for each component.
+		+\ iK in this demo I requested the post once for the title property, and also grab the userId for each post so that I can make author request for each specific post.
+			+\ iK when I grab the userId I saved it in a Set object so that I do not get repeated userId (author), therefore saving me from making repeated request unnecessarily.
+				+\ iK so in this demo I needed 1 post request and 10 users (author) request. If I had done it the easy way than I would have made 101 request because each user have 10 post each. But because we focus on saving userId in Set Object and extracting it to make one call for each user (author) than I only made 11 request, which saved me 90 requests from being made. zzzzzzzzzzzzzz
++\ 
 +\ 
 */
 
 	/******/
 	/*iKactionCreators.js file*/
 	/******/
+//	import axios from 'axios';
+
+//export
+const iKpostTitleActionCreator = () => {
+	return async iKdispatchP => {
+		const iKpostTitleResponse = await axios.get( "https://jsonplaceholder.typicode.com/posts" );
+
+		iKdispatchP({
+			type: "POST_TITLE",
+			kPayload: iKpostTitleResponse.data
+		});
+	}; /*END return async function */
+}; /*END iKpostTitleActionCreator */
+
+
+//export
+const iKauthorNameActionCreator = iKuserIdP => {
+	return async iKdispatchP => {
+		const iKauthorNameResponse = await axios.get( "https://jsonplaceholder.typicode.com/users/" + iKuserIdP );
+
+		iKdispatchP({
+			type: "AUTHOR_NAME",
+			kPayload: iKauthorNameResponse.data
+		});
+	}; /*END return async function */
+}; /*END iKauthorNameActionCreator */
+
+
+//export
+const iKdispatchBothPostTitle_AuthorNameActionCreator = () => {
+	return async (iKdispatchP, iKgetStateP) => {
+		await iKdispatchP( iKpostTitleActionCreator() );
+
+		const iKauthorNamesArray = iKgetStateP().iKpostTitleReducer.map( iKpostObjectP => iKpostObjectP.userId );
+
+		const iKauthorNameSetObject = new Set( iKauthorNamesArray );
+
+		for ( let iKuserId of iKauthorNameSetObject.values() ) {
+			iKdispatchP( iKauthorNameActionCreator(iKuserId) );
+		};
+	}; /*END return async function */
+}; /*END iKdispatchBothPostTitle_AuthorNameActionCreator */
+
+
 	/******/
 	/*iKreducers.js file*/
 	/******/
+//export
+const iKpostTitleReducer = (kStateP = [], kActionP) => {
+	switch (kActionP.type) {
+		case "POST_TITLE":
+			return [...kStateP, ...kActionP.kPayload];
+
+		default:
+			return kStateP;
+	}; /*END switch */
+}; /*END iKpostTitleReducer */
+
+
+//export
+const iKauthorNameReducer = (kStateP = [], kActionP) => {
+	switch (kActionP.type) {
+		case "AUTHOR_NAME":
+			return [...kStateP, kActionP.kPayload];
+
+		default:
+			return kStateP;
+	}; /*END switch */
+}; /*END iKauthorNameReducer */
+
+
 	/******/
-	/*App.js file*/
+	/*KpostTitle.js file*/
 	/******/
+//	import React from 'react';
+//	import { connect } from 'react-redux';
+//	import { iKdispatchBothPostTitle_AuthorNameActionCreator } from './iKactionCreators.js';
+//	import KauthorName from './KauthorName.js';
+const {connect} = ReactRedux;
+
+class KpostTitle extends React.Component {
+	componentDidMount() {
+		this.props.iKdispatchBothPostTitle_AuthorNameDispatch();
+	};
+
+	iKloopList = () => {
+		const { iKpostTitleReducerProps } = this.props;
+
+		return iKpostTitleReducerProps.map(iKpostObject => {
+			return (
+				<div key={ iKpostObject.id }>
+					<KauthorNameConnect iKuserId={ iKpostObject.userId } />
+					<strong>{ iKpostObject.title }</strong>
+					<br />
+				</div>
+			);
+		}); /*END return .map() */
+	}; /*END iKloopList */
+
+	render() {
+		return (
+			<article>{ this.iKloopList() }</article>
+		); /*END return */
+	}; /*END render */
+}; /*END KpostTitle component */
+
+
+const mapStateToProps1 = iKstateP => {
+	return { iKpostTitleReducerProps: iKstateP.iKpostTitleReducer };
+}; /*END mapStateToProps1 */
+
+
+const mapDispatchToProps1 = iKdispatchP => {
+	return {
+		iKdispatchBothPostTitle_AuthorNameDispatch: () => iKdispatchP( iKdispatchBothPostTitle_AuthorNameActionCreator() )
+	};
+}; /*END mapDispatchToProps1 */
+
+
+//export default 
+const KpostTitleConnect = connect(mapStateToProps1, mapDispatchToProps1) (KpostTitle);
+
+
 	/******/
-	/*IkFile1.js file*/
+	/*KauthorName.js file*/
 	/******/
+//	import React from 'react';
+//	import { connect } from 'react-redux';
+//	import { iKauthorNameActionCreator } from './iKactionCreators.js';
+
+
+/**/
+/*
+*/
+
+const KauthorName = props => {
+	const { iKAuthorNameObject } = props;
+
+	if( !iKAuthorNameObject ) {
+		return null;
+	};
+
+	return (
+		<code>{ iKAuthorNameObject.name } </code>
+	); /*END return */
+}; /*END KauthorName */
+
+
+const mapStateToProps2 = (iKstateP, iKownPropsP) => {
+	const { iKauthorNameReducer } = iKstateP;
+
+	const iKmatchingCorrectUserObject = iKauthorNameReducer.find( iKuserObject => iKuserObject.id === iKownPropsP.iKuserId );
+
+	return { iKAuthorNameObject: iKmatchingCorrectUserObject };
+}; /*END mapStateToProps2 */
+
+
+const mapDispatchToProps2 = iKdispatchP => {
+	return {
+		iKauthorNameDispatch: iKuserIdP => iKdispatchP( iKauthorNameActionCreator( iKuserIdP ) ) 
+	};
+}; /*END mapDispatchToProps2 */
+
+
+//export default
+const KauthorNameConnect = connect(mapStateToProps2, mapDispatchToProps2) (KauthorName);
+
+
+	/******/
+	/*Kstore.js file*/
+	/******/
+//	import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+//	import ReduxThunk from 'redux-thunk';
+//	import { iKpostTitleReducer, iKauthorNameReducer } from './iKreducers.js';
+const {createStore, combineReducers, applyMiddleware, compose} = Redux;
+
+const kAllReducers = combineReducers({
+	iKpostTitleReducer,
+	iKauthorNameReducer
+});
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const kStore1 = createStore(
+	kAllReducers,
+	composeEnhancers(
+		applyMiddleware( ReduxThunk.default )
+	)
+); /*END kStore1 */
+
+//	export default kStore1;
+
+
 	/******/
 	/*index.js file*/
 	/******/
 //	import React from 'react';
 //	import ReactDOM from 'react-dom';
-//	import App from './App';
+//	import { Provider } from 'react-redux';
+//	import KpostTitle from './KpostTitle.js';
+//	import kStore1 from './kStore.js';
+const {Provider} = ReactRedux;
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+	<React.StrictMode>
+		<Provider store={kStore1}>
+			<KpostTitleConnect />
+		</Provider>
+	</React.StrictMode>,
+	document.getElementById('root')
+); /*END ReactDOM.render() */
 
 
 /*1+
