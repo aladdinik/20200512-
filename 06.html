@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>06</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,8 +58,9 @@
 'use strict';
 
 
-/*Saving requests calls by calling the same request only once for each data needed and storing it in redux store for reusage / action creator within action creator / .find() / iK blog post with authors name */
+/*Saving requests calls by calling the same request only once for each data needed and storing it in redux store for usage / action creator within action creator / .find() / iK blog post with authors name */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
+	+\ iK there are  main js files in the demo: iKactionCreators.js / iKreducers.js / KpostTitle.js / KauthorName.js / Kstore.js / index.js .
 
 
 +\ There are two api request needed. First with the blog post which provide userId and the second api request contains the authors full details who wrote the post.
@@ -68,7 +69,7 @@
 		+\ You would also only want to save the data that you use and discard everything else, especially for each component.
 		+\ iK in this demo I requested the post once for the title property, and also grab the userId for each post so that I can make author request for each specific post.
 			+\ iK when I grab the userId I saved it in a Set object so that I do not get repeated userId (author), therefore saving me from making repeated request unnecessarily.
-				+\ iK so in this demo I needed 1 post request and 10 users (author) request. If I had done it the easy way than I would have made 101 request because each user have 10 post each. But because we focus on saving userId in Set Object and extracting it to make one call for each user (author) than I only made 11 request, which saved me 90 requests from being made. zzzzzzzzzzzzzz
+				+\ iK so in this demo I needed 1 post request and 10 users (author) request. If I had done it the easy way than I would have made 101 request because each user have 10 post each. But because we focus on saving userId in Set Object and extracting it to make one call for each user (author) than I only made 11 request in total, which saved me 90 requests from being made.
 +\ 
 +\ 
 */
@@ -85,7 +86,7 @@ const iKpostTitleActionCreator = () => {
 
 		iKdispatchP({
 			type: "POST_TITLE",
-			kPayload: iKpostTitleResponse.data
+			kPayload: iKpostTitleResponse.data /*1+*/
 		});
 	}; /*END return async function */
 }; /*END iKpostTitleActionCreator */
@@ -94,27 +95,27 @@ const iKpostTitleActionCreator = () => {
 //export
 const iKauthorNameActionCreator = iKuserIdP => {
 	return async iKdispatchP => {
-		const iKauthorNameResponse = await axios.get( "https://jsonplaceholder.typicode.com/users/" + iKuserIdP );
+		const iKauthorNameResponse = await axios.get( "https://jsonplaceholder.typicode.com/users/" + iKuserIdP ); /*2+*/
 
 		iKdispatchP({
 			type: "AUTHOR_NAME",
-			kPayload: iKauthorNameResponse.data
+			kPayload: iKauthorNameResponse.data /*3+*/
 		});
 	}; /*END return async function */
 }; /*END iKauthorNameActionCreator */
 
 
 //export
-const iKdispatchBothPostTitle_AuthorNameActionCreator = () => {
+const iKdispatchBothPostTitle_AuthorNameActionCreator = () => { /*4+*/
 	return async (iKdispatchP, iKgetStateP) => {
-		await iKdispatchP( iKpostTitleActionCreator() );
+		await iKdispatchP( iKpostTitleActionCreator() ); /*5+*/
 
-		const iKauthorNamesArray = iKgetStateP().iKpostTitleReducer.map( iKpostObjectP => iKpostObjectP.userId );
+		const iKauthorNamesArray = iKgetStateP().iKpostTitleReducer.map( iKpostObjectP => iKpostObjectP.userId ); /*6+*/
 
-		const iKauthorNameSetObject = new Set( iKauthorNamesArray );
+		const iKauthorNameSetObject = new Set( iKauthorNamesArray ); /*7+*/
 
 		for ( let iKuserId of iKauthorNameSetObject.values() ) {
-			iKdispatchP( iKauthorNameActionCreator(iKuserId) );
+			iKdispatchP( iKauthorNameActionCreator( iKuserId ) ); /*8+*/
 		};
 	}; /*END return async function */
 }; /*END iKdispatchBothPostTitle_AuthorNameActionCreator */
@@ -206,17 +207,14 @@ const KpostTitleConnect = connect(mapStateToProps1, mapDispatchToProps1) (KpostT
 //	import { connect } from 'react-redux';
 //	import { iKauthorNameActionCreator } from './iKactionCreators.js';
 
-
-/**/
-/*
-*/
-
 const KauthorName = props => {
 	const { iKAuthorNameObject } = props;
 
-	if( !iKAuthorNameObject ) {
+	if( !iKAuthorNameObject ) { /*9+*/
 		return null;
 	};
+
+	console.log(iKAuthorNameObject.name); /*10+*/
 
 	return (
 		<code>{ iKAuthorNameObject.name } </code>
@@ -225,23 +223,16 @@ const KauthorName = props => {
 
 
 const mapStateToProps2 = (iKstateP, iKownPropsP) => {
-	const { iKauthorNameReducer } = iKstateP;
+	const { iKauthorNameReducer } = iKstateP; /*11+*/
 
-	const iKmatchingCorrectUserObject = iKauthorNameReducer.find( iKuserObject => iKuserObject.id === iKownPropsP.iKuserId );
+	const iKmatchingCorrectUserObject = iKauthorNameReducer.find( iKuserObject => iKuserObject.id === iKownPropsP.iKuserId ); /*12+*/
 
-	return { iKAuthorNameObject: iKmatchingCorrectUserObject };
+	return { iKAuthorNameObject: iKmatchingCorrectUserObject }; /*13+*/
 }; /*END mapStateToProps2 */
 
 
-const mapDispatchToProps2 = iKdispatchP => {
-	return {
-		iKauthorNameDispatch: iKuserIdP => iKdispatchP( iKauthorNameActionCreator( iKuserIdP ) ) 
-	};
-}; /*END mapDispatchToProps2 */
-
-
 //export default
-const KauthorNameConnect = connect(mapStateToProps2, mapDispatchToProps2) (KauthorName);
+const KauthorNameConnect = connect(mapStateToProps2) (KauthorName);
 
 
 	/******/
@@ -289,16 +280,32 @@ ReactDOM.render(
 ); /*END ReactDOM.render() */
 
 
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
+/*1+ you will get all the post blogs object, and the userId property for each post blog.
+	+\ We will use the userId property to gain the user data object.
+2+ you get the specific user data by their userId number at the back of the url request.
+3+ returns the user object data.
+4+ This action creator is only for dispatching other action creator so we can do something more specific.
+	+\ we will dispatch both iKpostTitleActionCreator and iKauthorNameActionCreator action creators.
+5+ VIP you must use the iKdispatchP() (provided by redux-thunk parameter) for calling other action creator otherwise it will not work because redux will not know if an action creator was dispatched.
+6+ An array full of user userId number.
+	+\ there will be repeated userId number within the array.
+7+ Using Set object will eliminate repeated userId number, only one userId for each user.
+8+ dispatch each unique userId to the action creator to get only one request for each author user data, saving you from repeated request for the same author user data.
+9+ VIP must place this for the first render of react. If iKAuthorNameObject does not exist, than return null .
+	+\ iK this gave me so much problem before, as you should always check if you need to place a conditional statement when first rendering.
+10+ iKVIP It works here, but I notice console.log( iKAuthorNameObject.name ) does sometimes (especially for SPA) cause error on console, and not display the object property values as expected dispite existing, be aware that it would still be displayed on jsx but perhaps not on console.log(); 
+11+ iKauthorNameReducer contains an array with 10 unique author user object.
+12+ This will return the first author user object that matches.
+	+\ In order to match the userId (from post object that was passed down as props) must be the same as the author user object .id property.
+		+\ this will be done for each KauthorNameConnect component in the loop.
+13+ returns one specific author user object
+14+
+15+
+16+
+17+
+18+
+19+
+20+
 */
 
 
