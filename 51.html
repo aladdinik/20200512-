@@ -71,22 +71,22 @@ const iKobject1 = {
 	iKoProperty3: "iKoV3"
 };
 
-//const iKobject2 = {...iKobject1};
+const iKobject2 = {...iKobject1};
 
-//const iKoProperty145 = 45;
+const iKoProperty145 = 45;
+
+const {iKoProperty1, ...anyName} = iKobject1;
+
+
+console.log(iKobject1);
+console.log(anyName);
+
+//const iKfun1 = iKnameP => {
+//	const {iKnameP, why} = iKobject1;
+//	return why;
+//};
 //
-//const {iKoProperty145, ...anyName} = iKobject1;
-
-
-//console.log(iKobject1);
-//console.log(anyName);
-
-const iKfun1 = iKnameP => {
-	const {iKnameP, why} = iKobject1;
-	return why;
-};
-
-iKfunt1
+//iKfunt1
 
 
 	/******/

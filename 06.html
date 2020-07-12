@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en"> <!-- description -->
 <head>
     <meta charset="utf-8">
@@ -298,6 +297,10 @@ ReactDOM.render(
 12+ This will return the first author user object that matches.
 	+\ In order to match the userId (from post object that was passed down as props) must be the same as the author user object .id property.
 		+\ this will be done for each KauthorNameConnect component in the loop.
+12+ BIM it is more efficent to write complicated codes in mapStateToProps / mapDispatchToProps / connect()() than it is within the pure / class function.
+	+\ you could write the code within the pure / class function just fine and it will appear to work just fine too, however in large projects it might not be so efficient as pure / class function are not well suited to take in large data from state / props such as large array data.
+		+\ in the real world you might have separate file who already done the complicated coding and you just simply pass it through connect()() .
+	+\ VIP so when you can best to do complicated coding with large state / props data through mapStateToProps / mapDispatchToProps / connect()() whenever you can, so that it returns simply state / props values for the pure / class function to handle easily.
 13+ returns one specific author user object
 14+
 15+
