@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Simple example of using a google (youtube) api -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>02 Simple example of using a google (youtube) api</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -50,7 +45,6 @@
 <script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
 <!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
 <script src="zIK/03JS/kiK.js" type="text/javascript"></script>
 <script type="text/babel">
@@ -58,70 +52,38 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+/*Simple example of using a google (youtube) api */
+/*I am using the /search endpoint for youtube which allows me to use search youtube videos and properties.
++\ iKBIM there are plenty of params , but I only used the one I think I will likely use the most, but check youtube api documentation for more params. */
 
-+\ 
-*/
+axios.get('https://www.googleapis.com/youtube/v3/search', { /*1+*/
+	params: {
+		part: "snippet", /*2+*/
+		maxResults: 5,
+		q: "cheetah",	/*3+*/
+		key: "AIzaSyB5JZ-_sj25aHuRhEzD8THMhPR2TkVVBns" /*4+*/
+	}
+})
+	.then(iKresponse => {
+		console.log(iKresponse);  /*OP youtube object */ /*5+*/
+	});
 
-const iKobject1 = {
-	iKoProperty1: "iKoV1",
-	iKoProperty2: "iKoV2",
-	iKoProperty3: "iKoV3"
-};
-
-const iKobject2 = {...iKobject1};
-
-const iKoProperty145 = 45;
-
-const {iKoProperty1, ...anyName} = iKobject1;
-
-
-console.log(iKobject1);
-console.log(anyName);
-
-//const iKfun1 = iKnameP => {
-//	const {iKnameP, why} = iKobject1;
-//	return why;
-//};
-//
-//iKfunt1
-
-
-	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
-	/*App.js file*/
-	/******/
-	/******/
-	/*IkFile1.js file*/
-	/******/
-	/******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
-
-//ReactDOM.render(<App />, document.getElementById('root'));
-
-
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
-*/
+/*1+ /search is the endpoint we are using but there are plenty of other youtube api you can use.
+2+ is a required parameter
+	+\ iK? "snippet" is just for basic details about the search result which you can use collect data about the search result.
+3+ q for you search text for the youtube you want.
+4+ VIP you get the api key from google.api (console.developers.google.com) account (you will need to sign in to your google account and create a new credentials).
+	+\ BIM you will need to create a new (or existing) project in the account and gain api key for the specific google content api (youtube) you would like to use.
+		+\ you can even restrict your api key for only specific urls that you want to use your api key on, preventing anyone to use your api key on other sites.
+5+ Some key properties you will likely use a lot:
+	+\ iKresponse.data.items  =eg. this provide an array of individual youtube search object with many properties you can use.
+	+\ iKresponse.items[iKindex].id.videoId   =eg. VIP this is the id (for your specific youtube video) you need to use as src for video / iframe etc...
+		+\	%%%%%
+`https://www.youtube.com/watch?v=${iKreponse.items[iKindex].id.videoId}`
+		=eg. iK so it appears 'v' is a parameter to use for specific youtube video.
+			+\ `https://www.youtube.com/watch?v=pkhE14Rou-E`  =eg.
+		+\ you could use this as 'id' for react list 'key' props
+	+\ iKresponse.data.items.snippet  =eg. this contain some good properties you can use, such as description, thumbnails and etc... */
 
 
  /*OP */

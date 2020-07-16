@@ -1,4 +1,4 @@
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Saving requests calls by calling the same request only once for each data needed and storing it in redux store for usage / action creator within action creator / .find() / iK blog post with authors name -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -8,14 +8,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>06</title>
+    <title>06 Saving requests calls by calling the same request only once for each data needed and storing it in redux store for usage / action creator within action creator / .find() / iK blog post with authors name</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -60,25 +55,20 @@
 /*Saving requests calls by calling the same request only once for each data needed and storing it in redux store for usage / action creator within action creator / .find() / iK blog post with authors name */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 	+\ iK there are  main js files in the demo: iKactionCreators.js / iKreducers.js / KpostTitle.js / KauthorName.js / Kstore.js / index.js .
-
-
 +\ There are two api request needed. First with the blog post which provide userId and the second api request contains the authors full details who wrote the post.
 	+\ The easy way is to request all the data for each post and authors separately, however performance wise, it is a lot of demand and in the real world this is not practical.
 		+\ Ideally you would want to make a request once for data you know you will be using, and avoid making the same request again if you need to use the same data again somewhere else.
 		+\ You would also only want to save the data that you use and discard everything else, especially for each component.
 		+\ iK in this demo I requested the post once for the title property, and also grab the userId for each post so that I can make author request for each specific post.
 			+\ iK when I grab the userId I saved it in a Set object so that I do not get repeated userId (author), therefore saving me from making repeated request unnecessarily.
-				+\ iK so in this demo I needed 1 post request and 10 users (author) request. If I had done it the easy way than I would have made 101 request because each user have 10 post each. But because we focus on saving userId in Set Object and extracting it to make one call for each user (author) than I only made 11 request in total, which saved me 90 requests from being made.
-+\ 
-+\ 
-*/
+				+\ iK so in this demo I needed 1 post request and 10 users (author) request. If I had done it the easy way than I would have made 101 request because each user have 10 post each. But because we focus on saving userId in Set Object and extracting it to make one call for each user (author) than I only made 11 request in total, which saved me 90 requests from being made. */
 
 	/******/
 	/*iKactionCreators.js file*/
 	/******/
 //	import axios from 'axios';
 
-//export
+//	export
 const iKpostTitleActionCreator = () => {
 	return async iKdispatchP => {
 		const iKpostTitleResponse = await axios.get( "https://jsonplaceholder.typicode.com/posts" );
@@ -91,7 +81,7 @@ const iKpostTitleActionCreator = () => {
 }; /*END iKpostTitleActionCreator */
 
 
-//export
+//	export
 const iKauthorNameActionCreator = iKuserIdP => {
 	return async iKdispatchP => {
 		const iKauthorNameResponse = await axios.get( "https://jsonplaceholder.typicode.com/users/" + iKuserIdP ); /*2+*/
@@ -104,12 +94,14 @@ const iKauthorNameActionCreator = iKuserIdP => {
 }; /*END iKauthorNameActionCreator */
 
 
-//export
+//	export
 const iKdispatchBothPostTitle_AuthorNameActionCreator = () => { /*4+*/
 	return async (iKdispatchP, iKgetStateP) => {
 		await iKdispatchP( iKpostTitleActionCreator() ); /*5+*/
 
-		const iKauthorNamesArray = iKgetStateP().iKpostTitleReducer.map( iKpostObjectP => iKpostObjectP.userId ); /*6+*/
+		const iKpostTitleArray = iKgetStateP().iKpostTitleReducer;
+
+		const iKauthorNamesArray = iKpostTitleArray.map( iKpostObjectP => iKpostObjectP.userId ); /*6+*/
 
 		const iKauthorNameSetObject = new Set( iKauthorNamesArray ); /*7+*/
 
@@ -123,7 +115,7 @@ const iKdispatchBothPostTitle_AuthorNameActionCreator = () => { /*4+*/
 	/******/
 	/*iKreducers.js file*/
 	/******/
-//export
+//	export
 const iKpostTitleReducer = (kStateP = [], kActionP) => {
 	switch (kActionP.type) {
 		case "POST_TITLE":
@@ -135,7 +127,7 @@ const iKpostTitleReducer = (kStateP = [], kActionP) => {
 }; /*END iKpostTitleReducer */
 
 
-//export
+//	export
 const iKauthorNameReducer = (kStateP = [], kActionP) => {
 	switch (kActionP.type) {
 		case "AUTHOR_NAME":
@@ -169,7 +161,6 @@ class KpostTitle extends React.Component {
 				<div key={ iKpostObject.id }>
 					<KauthorNameConnect iKuserId={ iKpostObject.userId } />
 					<strong>{ iKpostObject.title }</strong>
-					<br />
 				</div>
 			);
 		}); /*END return .map() */
@@ -195,7 +186,7 @@ const mapDispatchToProps1 = iKdispatchP => {
 }; /*END mapDispatchToProps1 */
 
 
-//export default 
+//	export default 
 const KpostTitleConnect = connect(mapStateToProps1, mapDispatchToProps1) (KpostTitle);
 
 
@@ -230,7 +221,7 @@ const mapStateToProps2 = (iKstateP, iKownPropsP) => {
 }; /*END mapStateToProps2 */
 
 
-//export default
+//	export default
 const KauthorNameConnect = connect(mapStateToProps2) (KauthorName);
 
 
@@ -302,14 +293,9 @@ ReactDOM.render(
 		+\ in the real world you might have separate file who already done the complicated coding and you just simply pass it through connect()() .
 	+\ VIP so when you can best to do complicated coding with large state / props data through mapStateToProps / mapDispatchToProps / connect()() whenever you can, so that it returns simply state / props values for the pure / class function to handle easily.
 13+ returns one specific author user object
-14+
-15+
-16+
-17+
-18+
-19+
-20+
-*/
++\ VIP remember that asynchronous codes are in play, and you will get undefined in the first render, therefore it might cause error in the first render if not handled properly and you might not understand as it is hard to detect at first.
+	+\ VIP try to do codes in bits, or set conditional statement, or async function to prevent frustration, in order to prevent error with the undefined value in the first render.
+		+\ iKVIP.eg. In 13+, mapStateToProps2 - iKmatchingCorrectUserOjbect - iKAuthorNameObject code block : I would have gotten error if I had used iKmatchingCorrectUserObject.name property to pass the author user name to the component function because it would have been undefined in the first render as the property did not exist yet and still in the process of fetching data, so I would have had to use conditional statement or something. */
 
 
  /*OP */
