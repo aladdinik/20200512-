@@ -32,7 +32,7 @@
 
 
 <!-- index.html file (VIP for CRA) -->
-<div id="root"></div>
+<button id="iKbutton1">iKbutton1<span id="yoy">fh</span></button>
 
 
 <!---------------------- /main /////////////////////////-->
@@ -64,6 +64,7 @@
 
 +\ 
 */
+iKbutton1.addEventListener('click', () => console.log(event.target.contains(yoy)), true);
 
 	/******/
 	/*iKactionCreators.js file*/
@@ -84,7 +85,7 @@
 //	import ReactDOM from 'react-dom';
 //	import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//ReactDOM.render(<App />, document.getElementById('root'));
 
 
 /*1+

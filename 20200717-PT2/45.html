@@ -65,6 +65,12 @@
 +\ 
 */
 
+const iKset1 = setTimeout(() => console.log('iKset1'), 1000);
+const iKset2 = setTimeout(() => console.log('iKset2'), 1000);
+console.log(iKset1);
+console.log(iKset2);
+
+clearTimeout(4)
 	/******/
 	/*iKactionCreators.js file*/
 	/******/
@@ -84,8 +90,8 @@
 //	import ReactDOM from 'react-dom';
 //	import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
+//ReactDOM.render(<App />, document.getElementById('root'));
+//setTimeout(() => console.clear(), 300);
 
 /*1+
 2+
