@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>01 Accordion component using react hook / useState() / useEffect()</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,25 +58,119 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+/*Accordion component using react hook / useState() / useEffect() */
+/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commentted out here.
 
++\ the accordion is simple, click on title to show content, and click again on title or other title to close that content.
+    +\ iK the close click will not work outside the component such as the body, but I could have done something like that using document.body.addEventListener() .
+    +\ iK alternatively I could have instead use toggle class names to show the content element instead of using jsx element but I showed a different method here.
+        +\ I could also have used a 3rd library such as semantic-ui react where they already did the accordion coding and you just need to toggle the class name to show and unshow the content.
+            +\ iK normally you should consider doing it with 3rd library as they save you so much time and it is simple to use too, but I just wanted to show the react way.
++\ 
++\ 
 +\ 
 */
 
 	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
 	/*App.js file*/
 	/******/
+//    import React, {useState} from 'react';
+//    import IkAccordion from './IkAccordion.js';
+
+const iKBikeArrayObject = [ /*1+*/
+    {
+        title: "Road bike",
+        content: "Road bike are design to go fast on tarmac road."
+    },
+    {
+        title: "Mountain bike",
+        content: "Mountain bike are design to take on the toughest terrain for the adventurous souls."
+    },
+    {
+        title: "Gravel bike",
+        content: "Gravel bikes are like road bike but with the capabilities of going off-road."
+    },
+    {
+        title: "E-bike",
+        content: "E-bike are design for people who want a more relaxing journey."
+    }
+]; /*END iKBikeArrayObject */
+
+
+const {useState} = React;
+
+const App = props => {
+    const [iKselectedIndexState, iKselectedIndexSetState] = useState( null ); /*2+*/
+
+    const iKaccordionLoop = iKBikeArrayObject.map( (iKobject, iKindex) => {
+        return (
+            <IkAccordion
+                key={ iKobject.title }
+                iKtitle={ iKobject.title }
+                iKcontent={ iKobject.content }
+                iKindex={ iKindex }
+                iKselectedIndexState={ iKselectedIndexState }
+                iKselectedIndexSetState={ iKselectedIndexSetState }
+            />
+        );
+    }); /*END iKaccordionLoop */
+
+    return (
+        <div>
+            <h1>accordion component list</h1>
+            { iKaccordionLoop }
+        </div>
+    ); /*END return */
+}; /*END App component */
+
+//    export default App;
+
+
 	/******/
-	/*IkFile1.js file*/
+	/*IkAccordion.js file*/
 	/******/
+//    import React, {useState, useEffect} from 'react';
+
+const {useEffect} = React;
+
+const IkAccordion = ({iKtitle, iKcontent, iKindex, iKselectedIndexState, iKselectedIndexSetState}) => {
+    const [iKshowAccordionState, iKshowAccordionSetState] = useState( false ); /*3+*/
+
+
+    useEffect(
+        () => {
+            if (iKindex === iKselectedIndexState) { /*4+*/
+                iKshowAccordionSetState( true );
+            }
+            else if (iKindex !== iKselectedIndexState) {
+                iKshowAccordionSetState( false );
+            };
+        },
+        [iKindex, iKselectedIndexState] /*5+*/
+    ); /*END useEffect */
+
+
+    const iKclickCurrentIndex = () => {
+        if (iKshowAccordionState) { /*6+*/
+            iKselectedIndexSetState( null );
+        }
+        else if (!iKshowAccordionState) {
+            iKselectedIndexSetState( iKindex );
+        }
+    }; /*END iKclickCurrentIndex */
+
+
+    return (
+        <div>
+            <h2 onClick={ iKclickCurrentIndex } >{ iKtitle }</h2>
+            { iKshowAccordionState ? <p>{iKcontent}</p> : null }
+        </div>
+    ); /*END return */
+}; /*END IkAccordion */
+
+//    export default IkAccordion;
+
+
 	/******/
 	/*index.js file*/
 	/******/
@@ -86,17 +180,25 @@
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-
-/*1+
-2+
-3+
-4+
-5+
-6+
+/*1+ can be any data (including ajax data) you want to pass down to the accordion component.
+2+ useState() is the same as using class state.
+    +\ iKselectedIndexState is the state property name.
+    +\ iKselectedIndexSetState is the setState() method for iKselectedIndexState property.
+    +\ useState( null ) is the default value for the iKselectedIndexState property.
+2+ I could have use this useState() within the IkAccordion.js file instead since I am passing it as props, but I thought i leave it here
+3+ boolean value if this specific content accordion is currently being shown.
+4+ to determine if the user click is matching this specific accordion <h2> element title.
+5+ rerender IkAccordion component when iKindex or iKselectedIndexState is updated.
+6+ to determine if this specific accordion content is already open, and therefore close content when the user clicks again on the same <h2> element title.
 7+
 8+
 9+
 10+
+11+
+12+
+13+
+14+
+15+
 */
 
 

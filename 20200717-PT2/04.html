@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>04 Making async request inside useEffect()</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,38 +58,42 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+/*Making async request inside useEffect() */
+/* iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
++\ iK demo will show status code for the request being made.
++\
++\
 
-+\ 
 */
 
-	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
-	/*App.js file*/
-	/******/
-	/******/
-	/*IkFile1.js file*/
-	/******/
-	/******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
+const {useState, useEffect} = React;
+
+const App = props => {
+    const [iKstatusCodeState, iKstatusCodeSetState] = useState(0);
+
+    useEffect( () => {
+        const iKinnerFunction = async () => { /*1+*/
+            const iKresponse = await axios.get("https://jsonplaceholder.typicode.com/posts");
+
+            iKstatusCodeSetState( iKresponse.status );
+            console.log(iKresponse);
+        };
+
+        iKinnerFunction(); /*2+*/
+    }, []); /*END useEffect */ /*3+*/
+
+
+    return (<h1>{ iKstatusCodeState }</h1>);
+}; /*END App */
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-
-/*1+
-2+
-3+
+/*1+ VIP use a inner function if you want to do request using async function.
+    +\ iKVIP however when I tried it, async function still work if you do not use inner function, which I find strange because stephen said and showed that error would occur if you use async function on the outer function.
+    +\ BIM alternatively your inner function could also be (() => {...})() or thenable handler .
+2+ do not forget to invoke your inner function.
+3+ useEffect() will only run at the first render.
 4+
 5+
 6+
@@ -97,6 +101,11 @@ ReactDOM.render(<App />, document.getElementById('root'));
 8+
 9+
 10+
+11+
+12+
+13+
+14+
+15+
 */
 
 
