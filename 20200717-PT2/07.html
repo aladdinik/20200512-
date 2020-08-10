@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>07 Simple event bubbling in javascript</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -31,8 +31,10 @@
 <!--+ + + + + + + + + + + MAIN --------------------------->
 
 
-<!-- index.html file (VIP for CRA) -->
-<div id="root"></div>
+	<div id="iKparentDiv" class="border border-success w-75 p-3 h-75 d-inline-block">
+		here we go ik
+		<button id="iKchildButton">iKbutton</button>
+	</div>
 
 
 <!---------------------- /main /////////////////////////-->
@@ -58,37 +60,56 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
-
+/*Simple event bubbling in javascript */
+/* testing out event bubbling outcomes order.
++\ if .addEventListener() userCapture option set to false than it is in bubbling phrase.
+    +\ this is default.
+    +\ VIP event will start to invoke from the current event element (at the most child element event selected) and invoke its way outwards to its parents ancestors events (basically element that contains the same event type).
+    +\ 
+    +\ 
++\ if .addEventListener() userCapture option set to true than it is in capturing phrase.
+    +\ VIP event will start to invoke from the current element most top ancestors (assuming they are in capturing phrase too) and invoke its way inwards one by one to its end nested child elements containing the same event type 
+    +\ VIP however beware that the nested event elements will not invoke unless they are connected to the parents ancesters.
+        +\ eg. clicking on document with no child event elements (eg white space) will not invoke other child elements events unless you click directly on them too, they need to be connected.
++\ 
++\ 
++\ VIP event bubbling will always propogate its way through your document.
+    +\ you could stop event bubbling with .stopPropagation() , however it is not recommended unless you really have to.
+    +\ VIP event bubbling will not invoke other element through propagation if it is of different event types. Only same type events will be invoke. 
+        +\ VIP the only time other event types will be invoke is if it makes sense for it to invoke.
+            +\ eg. dblclick event will invoke click event despite it being different event type.
++\ 
++\ 
 +\ 
 */
 
-	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
-	/*App.js file*/
-	/******/
-	/******/
-	/*IkFile1.js file*/
-	/******/
-	/******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
+document.addEventListener('click', event => {
+	console.log("iKdocument")
+}, false);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+iKparentDiv.addEventListener('click', event => {
+	console.log("iKparentDiv")
+}, true); /*1+*/
+
+iKchildButton.addEventListener('click', event => {
+	console.log("iKchildButton")
+}, false);
+
+ /*OP
+ iKparentDiv
+ iKchildButton
+ iKdocument
+ */ /*2+*/
 
 
-/*1+
-2+
+setTimeout(() => console.clear(), 500); /*iK ignore this, for convenience */
+
+
+/*1+ setting the click event to capturing phrase.
+2+ If you click on the iKchildButton button, the capturing event (iKparentDiv) is invoke first, as the other elements event bubbles outwards normally.
+    +\ without capturing phrase, output would be iKchildButton > iKparentDiv > iKdocument.
+2+ if you click on iKparentDiv than output would be: iparentDiv > iKdocument
+2+ if you click on iKdocument than output would be: iKdocument 
 3+
 4+
 5+

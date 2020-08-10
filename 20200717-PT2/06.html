@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>06</title>
+    <title>06 Debounce throttling request api / only one request from the start / typing search request after every 700ms</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -61,10 +61,10 @@
 /*Debounce throttling request api / only one request from the start / typing search request after every 700ms */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ 
-+\ iK this is almost the same as the non-denounce throttling request api, but I use denounce method here.
-    +\ by using denounce method, I save one request from the start. Whereelse non-denounce throttling request api would use two request.
++\ iK this is almost the same as the non-debounce throttling request api, but I use debounce method here.
+    +\ by using debounce method, I save one http request from the start. Where else non-debounce throttling request api would use two http request for the start.
         +\ eg. first request for the folding page, and the second request (repeated request) for the setTimeout() setup.
-            +\ but in this demo only one request for the folding page.
+            +\ but in this demo only one http request for the folding page.
 +\ 
 +\ 
 +\ 
@@ -105,32 +105,32 @@ const App = props => {
 //    import React, {useState, useEffect} from 'react';
 //    import axios from 'axios';
 
-const IkSearchRequest = ({ iKsearchTextState }) => {
+const IkSearchRequest = ({ iKsearchTextState }) => { /*1+*/
     const [iKwikipediaArrayDataState, iKwikipediaArrayDataSetState] = useState([]);
-    const [iKdebounceSearchTextState, iKdebounceSearchTextSetState] = useState( iKsearchTextState );
+    const [iKdebounceSearchTextState, iKdebounceSearchTextSetState] = useState( iKsearchTextState ); /*2+*/
 
 
     useEffect(() => {
         const iKdelayedRequest = setTimeout(() => {
-            iKdebounceSearchTextSetState( iKsearchTextState );
+            iKdebounceSearchTextSetState( iKsearchTextState ); /*3+*/
         }, 2000);
 
         return () => clearTimeout( iKdelayedRequest );
     }); /*END useEffect() */
 
 
-    useEffect(() => {
+    useEffect(() => { 
         const iKsearchRequest = async () => {
             if (iKsearchTextState === '') return null;
 
-            const iKresponse = await axios.get( `https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=${ iKsearchTextState }` );
+            const iKresponse = await axios.get( `https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=${ iKdebounceSearchTextState }` ); /*4+*/
 
             iKwikipediaArrayDataSetState( iKresponse.data.query.search );
         }; /*END iKsearchRequest */
 
         iKsearchRequest();
 
-    }, [ iKdebounceSearchTextState ]); /*END useEffect() */
+    }, [ iKdebounceSearchTextState ]); /*END useEffect() */ /*5+*/
 
 
     const iKloopSearchWikipediaData = () => {
@@ -160,32 +160,14 @@ const IkSearchRequest = ({ iKsearchTextState }) => {
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-/*1+
-2+
-3+
-4+
-5+
+/*1+ I no longer need iKfoldingPageState state like I did for non-debounce method
+1+ VIP you will notice I need two useEffect for the component. First for setting setTimeout() to change the debounce state, along with cleanup function. And the second for making the http request if cleanup function is not invoke.
+    +\ besides from the useEffect() changes, everything else remains mostly the same.
+2+ iKdebounceSearchTextState is exactly the same as iKsearchTextState , but is there for easier invoking the useEffect() when it changes.
+3+ if the user stops typing and cleanup function is not invoke than iKdebounceSearchTextState() is updated.
+4+ you could still use iKsearchTextState here, as that would work too.
+5+ BIM whenever iKdebounceSearchTextState is updated, than this useEffect http request will be invoke.
 6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
-
-/*1+ this is for you to identify when the page first loads so you can instantly search request the default search value onto the page.
-2+ does not search request if text box is an empty string.
-3+ if it is the first load page than search request immediately, so you do not have to await 700ms and the user will see something on the page too before they type something.
-4+ iKfoldingPageState will now remain false and the delay 700ms search request will take over.
-5+ using setTimeout() to search request everytime the user type something in the text box.
-6+ VIP returning a function in useEffect() allows you to do cleanup function, which can be useful in certain situations like eg. cancelling setTimeout() .
-    +\ VIP the returning function will only be invoke when useEffect() dependencies have changed/updated. Otherwise the returning function will not do anything.
-        +\ the useEffect() dependencies is the second argument, which in this case is [ iKsearchTextState, iKfoldingPageState ]
-6+ BIM The cleanup function will only invoke if the user types in the text box again within 700ms. It will than cancel the setTimeout() request and restart anew setTimeout() request
 7+
 8+
 9+

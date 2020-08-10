@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>05 Non-denounce throttling request api  / cleanup function within useEffect / typing search request after every 700ms</title>
+    <title>05 Non-debounce throttling request api  / cleanup function within useEffect / typing search request after every 700ms</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,7 +58,7 @@
 'use strict';
 
 
-/*Non-denounce throttling request api  / cleanup function within useEffect / typing search request after every 700ms */
+/*Non-debounce throttling request api  / cleanup function within useEffect / typing search request after every 700ms */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ when the user types in the search box, there will be an automatic search request. However it is set up to only search request when the user stops typing after 700ms.
 +\ 
