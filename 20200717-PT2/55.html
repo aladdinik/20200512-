@@ -58,32 +58,81 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+//-	iK to show the that there will be error if you do not use cleanup if an event is listening or anything else such as setTimeout() / etc…
 
+
+/*Display toggle the component with addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener component / useRef() / .contains() */ 
+/*
+
++\ zzzzzzzz ik not wwhat I was after, so started again with 56.html
 +\ 
 */
 
 	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
 	/*App.js file*/
 	/******/
+const {useState} = React;
+
+const App = () => {
+    const [iKdisplayState, iKdisplaySetState] = useState(true);
+
+    return (
+        <div>
+            <IkDisplayButton
+                iKdisplayState={ iKdisplayState }
+                iKdisplaySetState={ iKdisplaySetState } 
+            />
+            <IkComponent1
+                iKdisplayState={ iKdisplayState }
+                iKdisplaySetState={ iKdisplaySetState } 
+            />
+        </div>
+    );
+}; /*END App */
+
+
 	/******/
-	/*IkFile1.js file*/
+	/*IkDisplayButton.js file*/
 	/******/
+const IkDisplayButton = ({ iKdisplayState, iKdisplaySetState }) => {
+    const iKonButtonClick = () => iKdisplaySetState( false ); 
+
+    return (
+        <button onClick={ iKonButtonClick } >IkDisplayButton</button>
+    );
+}; /*END IkDisplayButton */
+
+
+	/******/
+	/*IkComponent1.js file*/
+	/******/
+const IkComponent1 = ({ iKdisplayState, iKdisplaySetState }) => {
+    const iKonH1Click = () => {iKdisplaySetState( false )};
+
+    const iKbutton = () => {
+        if (iKdisplayState) {
+            return <button onClick={ iKonH1Click }>iKbutton</button>;
+        }
+        else {
+            return null;
+        }; /*END else */
+    }; /*END iKbutton */
+
+    return (
+        <div>
+            { iKbutton() }
+            { iKdisplayState 
+                ? <h1 onClick={ iKonH1Click }>true</h1> 
+                : <h1 onClick={ iKonH1Click }>false</h1>
+            }
+        </div>
+    );
+}; /*END IkComponent1 */
+
+
 	/******/
 	/*index.js file*/
 	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
-
 ReactDOM.render(<App />, document.getElementById('root'));
 
 

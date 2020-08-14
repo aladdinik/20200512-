@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>00 useEffect() when updating and using state in the first render with console.log() and jsx</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,26 +58,30 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+/*useEffect() when updating and using state in the first render with console.log() and jsx */
+/*iK interesting to watch out for that you get different output for console.log () and jsx.
 
 +\ 
 */
 
 	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
 	/*App.js file*/
 	/******/
-	/******/
-	/*IkFile1.js file*/
-	/******/
-	/******/
+const {useState, useEffect} = React;
+
+const App = () => {
+    const [iKstate, iKsetState] = useState(1);
+
+    useEffect( () => {
+        iKsetState(2)
+        console.log(iKstate); /*OP 1 */
+    }, [] );
+
+    return <div>{ iKstate }</div>; /*OP 2 */ /*1+*/
+}; /*END App */
+
+
+    /******/
 	/*index.js file*/
 	/******/
 //	import React from 'react';
@@ -87,7 +91,7 @@
 ReactDOM.render(<App />, document.getElementById('root'));
 
 
-/*1+
+/*1+ BIM however you get two render with jsx, the first output will be 1 but you get a second output of 2 in the end too.
 2+
 3+
 4+

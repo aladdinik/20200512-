@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>08 Event bubbling and capturing with javascript and react</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,38 +58,51 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+/*Event bubbling and capturing with javascript and react */
+/*VIP In react, .addEventListener() event bubbling will always take priority first before any react event bubbling.
 
++\ using document.body.addEventListener() inside the useEffect() to listen outside the react component.
+    +\ iK however there are no other components in this demo, so you would not get output outside this component, but normally you would do in a normal project.
 +\ 
 */
 
-	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
-	/*App.js file*/
-	/******/
-	/******/
-	/*IkFile1.js file*/
-	/******/
-	/******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
+const {useEffect} = React;
+
+
+const App = () => {
+    useEffect(() => {
+        document.body.addEventListener('click', () => { /*1+*/
+            console.log('iKdocument');
+        });
+    }, []); /*END useEffect */ /*2+*/
+
+    const iKparentDiv = () => { console.log('iKparentDiv') };
+
+    const iKchildButton = () => { console.log('iKchildButton') };
+
+    return (
+        <div onClick={ iKparentDiv }>
+            iKparentDiv
+            <button onClick={ iKchildButton }>iKchildButton</button>
+        </div>
+    );
+}; /*END App */
+
+ /*OP (if you click on iKchildButton):
+ iKdocument
+ iKchildButton
+ iKparentDiv
+ */ /*3+*/
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
 
-/*1+
-2+
-3+
+/*1+ BIM it would not be the same result if you use document. , as it then treats .addEventListener() like react event and place it in normal react event order.
+    +\ But using document.body.addEventListener() changes the order and takes priority first over any other react event.
+1+ iK It also makes no difference if you set bubbling to true or false , as that only works with other javascript event, not react event.
+2+ iK you only need to render the .addEventListener() once, as it will stay there.
+3+ if you click on iparentDiv than output would be iKdocument > iKparentDiv .
+3+ if you click outside the component than there would be no output because document.body is within this whole component in this particular demo, however that would be different when you use other components too.
 4+
 5+
 6+

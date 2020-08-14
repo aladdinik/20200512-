@@ -32,8 +32,8 @@
 
 
 	<div id="iKparentDiv" class="border border-success w-75 p-3 h-75 d-inline-block">
-		here we go ik
-		<button id="iKchildButton">iKbutton</button>
+		iKparentDiv
+		<button id="iKchildButton">iKchildButton</button>
 	</div>
 
 
@@ -78,12 +78,12 @@
     +\ VIP event bubbling will not invoke other element through propagation if it is of different event types. Only same type events will be invoke. 
         +\ VIP the only time other event types will be invoke is if it makes sense for it to invoke.
             +\ eg. dblclick event will invoke click event despite it being different event type.
-+\ 
++\ BIM in javascript, document. and document.body. are almost the same thing, but document. takes the full page shown, but documen.body. can be adjusted by the developer.
 +\ 
 +\ 
 */
 
-document.addEventListener('click', event => {
+document.body.addEventListener('click', event => {
 	console.log("iKdocument")
 }, false);
 
@@ -95,7 +95,7 @@ iKchildButton.addEventListener('click', event => {
 	console.log("iKchildButton")
 }, false);
 
- /*OP
+ /*OP (if you click on iKchildButton):
  iKparentDiv
  iKchildButton
  iKdocument
@@ -107,7 +107,7 @@ setTimeout(() => console.clear(), 500); /*iK ignore this, for convenience */
 
 /*1+ setting the click event to capturing phrase.
 2+ If you click on the iKchildButton button, the capturing event (iKparentDiv) is invoke first, as the other elements event bubbles outwards normally.
-    +\ without capturing phrase, output would be iKchildButton > iKparentDiv > iKdocument.
+    +\ VIP without capturing phrase, it would always start from child element towards parents elements, so output would be iKchildButton > iKparentDiv > iKdocument.
 2+ if you click on iKparentDiv than output would be: iparentDiv > iKdocument
 2+ if you click on iKdocument than output would be: iKdocument 
 3+

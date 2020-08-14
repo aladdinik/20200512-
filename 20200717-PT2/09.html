@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>05 Non-debounce throttling request api  / cleanup function within useEffect() / typing search request after every 700ms</title>
+    <title>09 Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains()</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,124 +58,117 @@
 'use strict';
 
 
-/*Non-debounce throttling request api  / cleanup function within useEffect() / typing search request after every 700ms */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ when the user types in the search box, there will be an automatic search request. However it is set up to only search request when the user stops typing after 700ms.
-+\ 
-+\ 
-+\ iK I did not use debounce method in this method because I want to keep this as simple for you to understand first.
-    +\ without debounce method, you will get two of the same wikipedia request when the page first loads. It is not a big issue but it is also not optimal performance.
-+\ 
-+\ 
+/*Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains() */
+/*iK toggle boolean state in IkAddEventListener component. Using react onClick event for true value, and .addEventListener() in useEffect() for false value.
+    +\ therefore you can click on the IkAddEventListener component and outside the IkAddEventListener component too with the use of document.body.addEventListener() .
+        +\ BIM however issues can occur if you remove the IkAddEventListener component because the .addEventListener() event inside the component will still remains active.
+            +\ VIP which is why you need to use a cleanup function too just like you would do with a componentWillUnmount() . Otherwise error occurs if no cleanup function.
+            +\ iK so in this demo I included a display settings for unmounting the IkAddEventListener component to demostrate how to use cleanup function (just like componentWillUnmount() ) too.
++\ This cleanup function method can be .addEventListener() and other such as setTimeout() / setInterval() / etc...
+    +\ basically anything that is still active when component is removed.
+    +\ eg. the .addEventListener() component could be a dropdown component which needs click event to select and close its dropdown items, and also click outside its dropdown component so that the dropdown items can be closed automatically.
 +\ 
 */
+
+const {useState, useEffect, useRef} = React;
 
 	/******/
 	/*App.js file*/
 	/******/
-//    import React, {useState} from 'react';
-//    import IkSearchRequest from './IkSearchRequest.js';
+const App = () => {
+    const [iKdisplayState, iKdisplaySetState] = useState( true ); /*1+*/
+    const [iKbooleanState, iKbooleanSetState] = useState( true ); /*2+*/
 
-const {useState, useEffect} = React;
-
-const App = props => {
-    const [iKsearchTextState, iKsearchTextSetState] = useState('javascript');
+    const iKdisplayAddEventListenerComponent = () => { /*3+*/
+        if ( iKdisplayState ) {
+            return (
+                <IkAddEventListener 
+                    iKbooleanSetState={ iKbooleanSetState }
+                />
+            );
+        }
+        else return null;
+    }; /*END iKdisplayAddEventListenerComponent */
 
     return (
         <div>
-            <input
-                type= 'text'
-                value={ iKsearchTextState }
-                onChange={event => iKsearchTextSetState( event.currentTarget.value )}
-            />
-            <IkSearchRequest
-                iKsearchTextState={ iKsearchTextState }
-            />
+            <button
+                onClick={ () => iKdisplaySetState( !iKdisplayState ) } /*4+*/
+            >
+                display Toggle IkAddEventListener component and iKbooleanSetState: false
+            </button>
+
+            { iKdisplayAddEventListenerComponent() /*5+*/ }
+
+            <h1><code>document.body. for iKbooleanSetState: false</code></h1> {/*6+*/}
+
+            <h1>{ `iKbooleanState: ${iKbooleanState}` }</h1>            
         </div>
     ); /*END return */
-}; /*END App component*/
-
-//    export default App;
+}; /*END App */
 
 
 	/******/
-	/*IkSearchRequest.js file*/
+	/*IkAddEventListener.js file*/
 	/******/
-//    import React, {useState, useEffect} from 'react';
-//    import axios from 'axios';
-
-const IkSearchRequest = ({ iKsearchTextState }) => {
-    const [iKfoldingPageState, iKfoldingPageSetState] = useState( true ); /*1+*/
-    const [iKwikipediaArrayDataState, iKwikipediaArrayDataSetState] = useState([]);
-
+const IkAddEventListener = ({ iKbooleanSetState }) => {
+    const iKbuttonRef = useRef(); /*7+*/
 
     useEffect(() => {
-        const iKsearchRequest = async () => {
-            if (iKsearchTextState === '') return null; /*2+*/
+        const iKeventListenerCallBack = event => { /*8+*/
+            if( iKbuttonRef.current.contains( event.target ) ) { /*9+*/
+                return; /*10*/
+            };
 
-            const iKresponse = await axios.get( `https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=${ iKsearchTextState }` );
+            iKbooleanSetState( false ); /*11+*/
+        }; /*END iKeventListenerCallBack */
 
-            iKwikipediaArrayDataSetState( iKresponse.data.query.search );
-        }; /*END iKsearchRequest */
+        document.body.addEventListener( 'click', iKeventListenerCallBack ); /*12+*/
 
-        if (iKfoldingPageState){ /*3+*/
-            iKsearchRequest();
-            iKfoldingPageSetState( false ); /*4+*/
-        };
-
-        const iKdelayedRequest = setTimeout(() => { /*5+*/
-            iKsearchRequest()
-        }, 700);
-
-        return () => clearTimeout( iKdelayedRequest ); /*6+*/
-    }, [ iKsearchTextState, iKfoldingPageState ]); /*END useEffect() */
-
-
-    const iKloopSearchWikipediaData = () => {
-        return iKwikipediaArrayDataState.map( iKobjectP => {
-            return (
-                <div key={ iKobjectP.pageid } >{ iKobjectP.title }</div>
-            );
-        });
-    }; /*END iKloopSearchWikipediaData */
-
+        return () => document.body.removeEventListener( 'click', iKeventListenerCallBack ); /*13+*/
+    }, []) /*END useEffect() */ /*14+*/
 
     return (
-        <div>{ iKloopSearchWikipediaData() }</div>
+        <div>
+            <button
+                ref={ iKbuttonRef } /*15+*/
+                onClick={ () => iKbooleanSetState( true ) } /*16+*/
+            >
+                IkAddEventListener for iKbooleanSetState: true
+            </button>
+        </div>
     );
-}; /*END IkSearchRequest component */
-
-
-//    export default IkSearchRequest;
+}; /*END IkAddEventListener */
 
 
 	/******/
 	/*index.js file*/
 	/******/
-//    import React from 'react';
-//    import ReactDOM from 'react-dom';
-//    import App from './App';
-
 ReactDOM.render(<App />, document.getElementById('root'));
 
-/*1+ this is for you to identify when the page first loads so you can instantly search request the default search value onto the page.
-2+ does not search request if text box is an empty string.
-3+ if it is the first load page than search request immediately, so you do not have to await 700ms and the user will see something on the page too before they type something.
-4+ iKfoldingPageState will now remain false and the delay 700ms search request will take over.
-5+ using setTimeout() to search request everytime the user type something in the text box.
-6+ VIP returning a function in useEffect() allows you to do cleanup function, which can be useful in certain situations like eg. cancelling setTimeout() .
-    +\ VIP the returning function will only be invoke when useEffect() dependencies have changed/updated. Otherwise the returning function will not do anything.
-        +\ the useEffect() dependencies is the second argument, which in this case is [ iKsearchTextState, iKfoldingPageState ]
-6+ BIM The cleanup function will only invoke if the user types in the text box again within 700ms. It will than cancel the setTimeout() request and restart anew setTimeout() request
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
+/*1+ to display the IkAddEventListener component or not.
+2+ boolean for IkAddEventListener component to toggle with using its event listener.
+3+ determines if IkAddEventListener component is shown or not using iKdisplayState boolean value.
+4+ toggle button for iKdisplayState boolean value.
+5+ display IkAddEventListener component or not.
+6+ iK this is non-essential, it is to just to give more space on the web page to click on that is part of document.body.addEventListener() .
+7+ useRef() works similarly as createRef() . 
+8+ creating a function callback is easier to insert both .addEventListener() and .removeEventListener() .
+9+ true if event.target is also iKbuttonRef .
+9+ You could have also use iKbuttonRef as the parent element (event delegation).
+10+ so if clicking on the iKbuttonRef element, than return nothing, as there is nothing we want to do here.
+11+ if clicking is not iKbuttonRef element than change iKbooleanState to false.
+    +\ basically you will now be clicking every other element that is not iKbuttonRef element, which is where document.body. comes in.
+12+ event listener is on document.body. , and will not work on iKbuttonRef element.
+13+ VIP if IkAddEventListener component is removed (eg. via iKdisplayState in this demo) than ensure you have a cleanup function in place as the .addEventListener() will still be active despite its component being removed, otherwise error could occur.
+    +\ BIM the cleanup function works exactly like componentWillUnmount() .
+14+ you only need to insert the .addEventListener() on the first render. But could be different for other events such as setTimeout() .
+15+ alternatively you could have used ref on the parent div as event delegation.
+16+ react click event which works normally when you select the iKbuttonRef element. 
+17+
+18+
+19
+20+
 */
 
 

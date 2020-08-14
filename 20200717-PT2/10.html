@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>05 Non-debounce throttling request api  / cleanup function within useEffect() / typing search request after every 700ms</title>
+    <title>10 Google translation api</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 
@@ -58,115 +58,69 @@
 'use strict';
 
 
-/*Non-debounce throttling request api  / cleanup function within useEffect() / typing search request after every 700ms */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ when the user types in the search box, there will be an automatic search request. However it is set up to only search request when the user stops typing after 700ms.
-+\ 
-+\ 
-+\ iK I did not use debounce method in this method because I want to keep this as simple for you to understand first.
-    +\ without debounce method, you will get two of the same wikipedia request when the page first loads. It is not a big issue but it is also not optimal performance.
-+\ 
-+\ 
+/*Google translation api */
+/*the translation will not work on html project because it only works on localhost:3000 .
+    +\ because the api key was taken from stephen (rallycoder), and he put a restriction on the api key.
+        +\ so it will only work localhost:3000 and anything else will be 403 code (forbidden) .
+        +\ however this gives you a good idea to use google translation if you are willing to pay for the api key yourself. You might be able to get it for free depending if you do not use many characters set by google.
++\ must be a post request / 'key' api key / 'q' parameter for user text / 'target' parameter for language to translate to.
++\ POST 'https://translation.googleapis.com/language/translate/v2'
++\ AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM  -iK this is stephen api key, and it will only work with localhost:3000 page 
 +\ 
 */
+axios.post(
+    'https://translation.googleapis.com/language/translate/v2',
+    {},
+    {
+        params: {
+            q: 'string to be translated in french',
+            target: 'fr',
+            key: 'AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM'
+        }
+    }
+) /*END axios.post() */
 
+    .then(iKresponseP => {
+        console.log( iKresponseP.data.data.translations[0].translatedText );
+    })
+
+ /*OP 'chaîne à traduire en français' */ /*1+*/
+
+
+
+    /******/
+	/*iKactionCreators.js file*/
+	/******/
+	/******/
+	/*iKreducers.js file*/
+	/******/
 	/******/
 	/*App.js file*/
 	/******/
-//    import React, {useState} from 'react';
-//    import IkSearchRequest from './IkSearchRequest.js';
-
-const {useState, useEffect} = React;
-
-const App = props => {
-    const [iKsearchTextState, iKsearchTextSetState] = useState('javascript');
-
-    return (
-        <div>
-            <input
-                type= 'text'
-                value={ iKsearchTextState }
-                onChange={event => iKsearchTextSetState( event.currentTarget.value )}
-            />
-            <IkSearchRequest
-                iKsearchTextState={ iKsearchTextState }
-            />
-        </div>
-    ); /*END return */
-}; /*END App component*/
-
-//    export default App;
-
-
+//const App = () => {
+//    return (
+//        <div>iK App working</div>
+//    );
+//}; /*END App */
 	/******/
-	/*IkSearchRequest.js file*/
+	/*IkFile1.js file*/
 	/******/
-//    import React, {useState, useEffect} from 'react';
-//    import axios from 'axios';
-
-const IkSearchRequest = ({ iKsearchTextState }) => {
-    const [iKfoldingPageState, iKfoldingPageSetState] = useState( true ); /*1+*/
-    const [iKwikipediaArrayDataState, iKwikipediaArrayDataSetState] = useState([]);
-
-
-    useEffect(() => {
-        const iKsearchRequest = async () => {
-            if (iKsearchTextState === '') return null; /*2+*/
-
-            const iKresponse = await axios.get( `https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=${ iKsearchTextState }` );
-
-            iKwikipediaArrayDataSetState( iKresponse.data.query.search );
-        }; /*END iKsearchRequest */
-
-        if (iKfoldingPageState){ /*3+*/
-            iKsearchRequest();
-            iKfoldingPageSetState( false ); /*4+*/
-        };
-
-        const iKdelayedRequest = setTimeout(() => { /*5+*/
-            iKsearchRequest()
-        }, 700);
-
-        return () => clearTimeout( iKdelayedRequest ); /*6+*/
-    }, [ iKsearchTextState, iKfoldingPageState ]); /*END useEffect() */
-
-
-    const iKloopSearchWikipediaData = () => {
-        return iKwikipediaArrayDataState.map( iKobjectP => {
-            return (
-                <div key={ iKobjectP.pageid } >{ iKobjectP.title }</div>
-            );
-        });
-    }; /*END iKloopSearchWikipediaData */
-
-
-    return (
-        <div>{ iKloopSearchWikipediaData() }</div>
-    );
-}; /*END IkSearchRequest component */
-
-
-//    export default IkSearchRequest;
-
-
 	/******/
 	/*index.js file*/
 	/******/
-//    import React from 'react';
-//    import ReactDOM from 'react-dom';
-//    import App from './App';
+//	import React from 'react';
+//	import ReactDOM from 'react-dom';
+//	import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//ReactDOM.render(<App />, document.getElementById('root'));
 
-/*1+ this is for you to identify when the page first loads so you can instantly search request the default search value onto the page.
-2+ does not search request if text box is an empty string.
-3+ if it is the first load page than search request immediately, so you do not have to await 700ms and the user will see something on the page too before they type something.
-4+ iKfoldingPageState will now remain false and the delay 700ms search request will take over.
-5+ using setTimeout() to search request everytime the user type something in the text box.
-6+ VIP returning a function in useEffect() allows you to do cleanup function, which can be useful in certain situations like eg. cancelling setTimeout() .
-    +\ VIP the returning function will only be invoke when useEffect() dependencies have changed/updated. Otherwise the returning function will not do anything.
-        +\ the useEffect() dependencies is the second argument, which in this case is [ iKsearchTextState, iKfoldingPageState ]
-6+ BIM The cleanup function will only invoke if the user types in the text box again within 700ms. It will than cancel the setTimeout() request and restart anew setTimeout() request
+
+/*1+ only works if you are using localhost:3000 , as we are using stephen limited api key . Otherwise you will get a error 403 code.
+2+
+3+
+4+
+5+
+6+
 7+
 8+
 9+
