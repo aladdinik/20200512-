@@ -51,6 +51,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.0.12/purify.min.js" integrity="sha512-Pkzp1f+T81Q7K8Dhj8Sc6SPhl+4D5JEe9TTjJLy7xbv+EdxStU9uRXEVzYOqjP+s6+lDAXo3nZ04szSG71ArhA==" crossorigin="anonymous"></script>
+    
 <!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
 <script src="zIK/03JS/kiK.js" type="text/javascript"></script>
 <script type="text/babel">
@@ -64,6 +67,13 @@
 
 +\ 
 */
+//console.log(DOMPurify)
+const dirty = '<h1>hello</h1>';
+
+
+const clean = DOMPurify.sanitize('<img src=x onerror=alert(1)//>'); // becomes <img src="x">;
+
+console.log(clean)
 
 	/******/
 	/*iKactionCreators.js file*/
@@ -73,13 +83,13 @@
 	/******/
 	/******/
 	/*App.js file*/
-	/******/
-const App = () => {
-    return (
-        <div>iK App working</div>
-    );
-}; /*END App */
-	/******/
+//	/******/
+//const App = () => {
+//    return (
+//        <div>iK App working</div>
+//    );
+//}; /*END App */
+//	/******/
 	/*IkFile1.js file*/
 	/******/
 	/******/
@@ -89,7 +99,7 @@ const App = () => {
 //	import ReactDOM from 'react-dom';
 //	import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//ReactDOM.render(<App />, document.getElementById('root'));
 
 
 /*1+

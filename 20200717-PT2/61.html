@@ -75,20 +75,6 @@
 	/*App.js file*/
 	/******/
 const App = () => {
-    const {useState, useEffect} = React;
-    const iKstate = useState( 'iKstateValue1' );
-
-    useEffect(() => {
-
-        console.log(iKstate[0]); /*OP: 'iKstateValue1' */
-
-        iKstate[1]( 'Kreassignment1' );
-
-        console.log(iKstate[0]); /*OP: ‘iKreassignment1’ */
-    }, [ iKstate[0] ]);
-    
-
-
     return (
         <div>iK App working</div>
     );
