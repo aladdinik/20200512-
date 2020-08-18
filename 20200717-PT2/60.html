@@ -74,7 +74,16 @@
 	/******/
 	/*App.js file*/
 	/******/
+const {useEffect} = React;
+
 const App = () => {
+    useEffect(() => {
+        document.body.addEventListener( 'click', event => {
+            console.log( event.localName );
+        })
+    }, [] )
+        
+
     return (
         <div>iK App working</div>
     );

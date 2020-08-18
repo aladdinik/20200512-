@@ -65,7 +65,7 @@
     +\ by using debounce method, I save one http request from the start. Where else non-debounce throttling request api would use two http request for the start.
         +\ eg. first request for the folding page, and the second request (repeated request) for the setTimeout() setup.
             +\ but in this demo only one http request for the folding page.
-+\ 
+    +\ Also one of the main reason to also use debounce method is because it resolve missing dependency warning on console. Meaning beforehand you were using a dependency but you did not place the dependency within useState() second argument. However sometimes when you do place the dependency in the second argument than you could prevent optimum performance such as eg extra search request (this demo). Using debounce method will resolve both issues.
 +\ 
 +\ 
 +\ 
@@ -167,6 +167,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 3+ if the user stops typing and cleanup function is not invoke than iKdebounceSearchTextState() is updated.
 4+ you could still use iKsearchTextState here, as that would work too.
 5+ BIM whenever iKdebounceSearchTextState is updated, than this useEffect http request will be invoke.
+
 6+
 7+
 8+

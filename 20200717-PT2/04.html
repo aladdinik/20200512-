@@ -91,7 +91,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 /*1+ VIP use a inner function if you want to do request using async function.
     +\ iKVIP however when I tried it, async function still work if you do not use inner function, which I find strange because stephen said and showed that error would occur if you use async function on the outer function.
-    +\ BIM alternatively your inner function could also be (() => {...})() or thenable handler .
+    +\ BIM alternatively your inner function could also be (() => {...})() or thenable handler, or you create your async function outside useEffect() and invoke it inside useEffect() .
 2+ do not forget to invoke your inner function.
 3+ useEffect() will only run at the first render.
 4+
