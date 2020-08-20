@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains() -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -12,11 +12,6 @@
     <title>09 Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains()</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -61,14 +56,12 @@
 /*Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains() */
 /*iK toggle boolean state in IkAddEventListener component. Using react onClick event for true value, and .addEventListener() in useEffect() for false value.
     +\ therefore you can click on the IkAddEventListener component and outside the IkAddEventListener component too with the use of document.body.addEventListener() .
-        +\ BIM however issues can occur if you remove the IkAddEventListener component because the .addEventListener() event inside the component will still remains active.
+        +\ BIM however issues can occur if you remove the IkAddEventListener component because the .addEventListener() event inside the component will still remains active on the webpage.
             +\ VIP which is why you need to use a cleanup function too just like you would do with a componentWillUnmount() . Otherwise error occurs if no cleanup function.
             +\ iK so in this demo I included a display settings for unmounting the IkAddEventListener component to demostrate how to use cleanup function (just like componentWillUnmount() ) too.
-+\ This cleanup function method can be .addEventListener() and other such as setTimeout() / setInterval() / etc...
-    +\ basically anything that is still active when component is removed.
-    +\ eg. the .addEventListener() component could be a dropdown component which needs click event to select and close its dropdown items, and also click outside its dropdown component so that the dropdown items can be closed automatically.
-+\ 
-*/
++\ This cleanup function method can be use for removing .addEventListener() / setTimeout() / setInterval() / etc...
+    +\ basically anything that is still active when component is unmounted.
+    +\ eg. the .addEventListener() component could be a dropdown component which needs click event to open and close its dropdown items, whilst also clicking outside its dropdown component so that the dropdown items can be closed automatically. */
 
 const {useState, useEffect, useRef} = React;
 
@@ -126,7 +119,7 @@ const IkAddEventListener = ({ iKbooleanSetState }) => {
         document.body.addEventListener( 'click', iKeventListenerCallBack ); /*12+*/
 
         return () => document.body.removeEventListener( 'click', iKeventListenerCallBack ); /*13+*/
-    }, []) /*END useEffect() */ /*14+*/
+    }, [] ) /*END useEffect() */ /*14+*/
 
     return (
         <div>
@@ -137,7 +130,7 @@ const IkAddEventListener = ({ iKbooleanSetState }) => {
                 IkAddEventListener for iKbooleanSetState: true
             </button>
         </div>
-    );
+    ); /*END return */
 }; /*END IkAddEventListener */
 
 
@@ -154,7 +147,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 6+ iK this is non-essential, it is to just to give more space on the web page to click on that is part of document.body.addEventListener() .
 7+ useRef() works similarly as createRef() . 
 8+ creating a function callback is easier to insert both .addEventListener() and .removeEventListener() .
-9+ true if event.target is also iKbuttonRef .
+9+ true if event.target is also iKbuttonRef or any of its descendants.
 9+ You could have also use iKbuttonRef as the parent element (event delegation).
 10+ so if clicking on the iKbuttonRef element, than return nothing, as there is nothing we want to do here.
 11+ if clicking is not iKbuttonRef element than change iKbooleanState to false.
@@ -162,14 +155,10 @@ ReactDOM.render(<App />, document.getElementById('root'));
 12+ event listener is on document.body. , and will not work on iKbuttonRef element.
 13+ VIP if IkAddEventListener component is removed (eg. via iKdisplayState in this demo) than ensure you have a cleanup function in place as the .addEventListener() will still be active despite its component being removed, otherwise error could occur.
     +\ BIM the cleanup function works exactly like componentWillUnmount() .
+    +\ ensure the .removeEventListener() is wrapped in a annoymouns function for the cleanup function like in this demo.
 14+ you only need to insert the .addEventListener() on the first render. But could be different for other events such as setTimeout() .
 15+ alternatively you could have used ref on the parent div as event delegation.
-16+ react click event which works normally when you select the iKbuttonRef element. 
-17+
-18+
-19
-20+
-*/
+16+ react click event which works normally when you select the iKbuttonRef element. */
 
 
  /*OP */

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- dangerouslySetInnerHTML={{__html: ...}} -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -12,11 +12,6 @@
     <title>02 dangerouslySetInnerHTML={{__html: ...}}</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -59,18 +54,8 @@
 
 
 /* dangerouslySetInnerHTML={{__html: ...}} */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 
-+\ 
-*/
-
-
-	/******/
-	/*App.js file*/
-	/******/
 const iKinnerHtmlString1 = "<h1>iKinnerHTML string</h1>"; /*1+*/
-
 
 const App = () => (
     <div 
@@ -78,29 +63,14 @@ const App = () => (
     ></div> /*3+*/
 ); /*END App */
 
-
 ReactDOM.render(<App />, document.getElementById('root'));
 
-
 /*1+ the string contains html element tags.
-    +\ sometimes data you collected will already have html element tags set up for you for your convience.
+    +\ sometimes data (eg. ajax) you collected will already have html element tags set up for you for your convience.
 2+ the prop dangerouslySetInnerHTML works almost identical to js .innerHTML .
     +\ minor difference is how react will render the props.
     +\ VIP just like .innerHTML, it is not recommended to use dangerouslySetInnerHTML prop too because of potential security hack such as XSS attack.
-3+ VIP the jsx element must be empty for dangerouslySetInnerHTML to work otherwise error will occur.
-4+
-5+
-6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+3+ VIP the jsx element must be empty for dangerouslySetInnerHTML to work otherwise error will occur. */
 
 
  /*OP */

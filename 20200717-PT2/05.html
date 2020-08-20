@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Non-debounce throttling request api  / cleanup function within useEffect() / user typing search request after every 700ms -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>05 Non-debounce throttling request api  / cleanup function within useEffect() / typing search request after every 700ms</title>
+    <title>05 Non-debounce throttling request api  / cleanup function within useEffect() / user typing search request after every 700ms</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -58,17 +53,11 @@
 'use strict';
 
 
-/*Non-debounce throttling request api  / cleanup function within useEffect() / typing search request after every 700ms */
+/*Non-debounce throttling request api  / cleanup function within useEffect() / user typing search request after every 700ms */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ when the user types in the search box, there will be an automatic search request. However it is set up to only search request when the user stops typing after 700ms.
-+\ 
-+\ 
-+\ iK I did not use debounce method in this method because I want to keep this as simple for you to understand first.
-    +\ without debounce method, you will get two of the same wikipedia request when the page first loads. It is not a big issue but it is also not optimal performance.
-+\ 
-+\ 
-+\ 
-*/
++\ iK I did not use debounce method in this demo because I want to keep this as simple for you to understand first.
+    +\ without debounce method, you will get two of the same wikipedia request when the page first loads. It is not a big issue but it is also not optimal performance. */
 
 	/******/
 	/*App.js file*/
@@ -79,7 +68,7 @@
 const {useState, useEffect} = React;
 
 const App = props => {
-    const [iKsearchTextState, iKsearchTextSetState] = useState('javascript');
+    const [iKsearchTextState, iKsearchTextSetState] = useState( 'javascript' );
 
     return (
         <div>
@@ -93,7 +82,7 @@ const App = props => {
             />
         </div>
     ); /*END return */
-}; /*END App component*/
+}; /*END App */
 
 //    export default App;
 
@@ -143,8 +132,7 @@ const IkSearchRequest = ({ iKsearchTextState }) => {
     return (
         <div>{ iKloopSearchWikipediaData() }</div>
     );
-}; /*END IkSearchRequest component */
-
+}; /*END IkSearchRequest */
 
 //    export default IkSearchRequest;
 
@@ -164,19 +152,9 @@ ReactDOM.render(<App />, document.getElementById('root'));
 4+ iKfoldingPageState will now remain false and the delay 700ms search request will take over.
 5+ using setTimeout() to search request everytime the user type something in the text box.
 6+ VIP returning a function in useEffect() allows you to do cleanup function, which can be useful in certain situations like eg. cancelling setTimeout() .
-    +\ VIP the returning function will only be invoke when useEffect() dependencies have changed/updated. Otherwise the returning function will not do anything.
+    +\ VIP the returning function will only be invoke when useEffect() dependencies have changed/updated or the component has been unmounted. Otherwise the returning function will not do anything.
         +\ the useEffect() dependencies is the second argument, which in this case is [ iKsearchTextState, iKfoldingPageState ]
-6+ BIM The cleanup function will only invoke if the user types in the text box again within 700ms. It will than cancel the setTimeout() request and restart anew setTimeout() request
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+6+ BIM The cleanup function will invoke if the user, types in the text box again within 700ms. It will than cancel the setTimeout() request and restart anew setTimeout() request */
 
 
  /*OP */

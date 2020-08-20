@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Accordion component using react hook / useState() / useEffect() -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -12,11 +12,6 @@
     <title>01 Accordion component using react hook / useState() / useEffect()</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -60,16 +55,11 @@
 
 /*Accordion component using react hook / useState() / useEffect() */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commentted out here.
-
 +\ the accordion is simple, click on title to show content, and click again on title or other title to close that content.
-    +\ iK the close click will not work outside the component such as the body, but I could have done something like that using document.body.addEventListener() .
+    +\ iK the close click will not work outside the component such as the document.body, but I could have done something like that using document.body.addEventListener() .
     +\ iK alternatively I could have instead use toggle class names to show the content element instead of using jsx element but I showed a different method here.
         +\ I could also have used a 3rd library such as semantic-ui react where they already did the accordion coding and you just need to toggle the class name to show and unshow the content.
-            +\ iK normally you should consider doing it with 3rd library as they save you so much time and it is simple to use too, but I just wanted to show the react way.
-+\ 
-+\ 
-+\ 
-*/
+            +\ iK normally you should consider doing it with 3rd library as they save you so much time and it is simple to use too, but I just wanted to show the react way. */
 
 	/******/
 	/*App.js file*/
@@ -92,7 +82,7 @@ const iKBikeArrayObject = [ /*1+*/
     },
     {
         title: "E-bike",
-        content: "E-bike are design for people who want a more relaxing journey."
+        content: "E-bike are design for people who want a more relaxing and speedy journey."
     }
 ]; /*END iKBikeArrayObject */
 
@@ -102,13 +92,13 @@ const {useState} = React;
 const App = props => {
     const [iKselectedIndexState, iKselectedIndexSetState] = useState( null ); /*2+*/
 
-    const iKaccordionLoop = iKBikeArrayObject.map( (iKobject, iKindex) => {
+    const iKaccordionLoop = iKBikeArrayObject.map( (iKobjectP, iKindexP) => {
         return (
             <IkAccordion
-                key={ iKobject.title }
-                iKtitle={ iKobject.title }
-                iKcontent={ iKobject.content }
-                iKindex={ iKindex }
+                key={ iKobjectP.title }
+                iKtitle={ iKobjectP.title }
+                iKcontent={ iKobjectP.content }
+                iKindex={ iKindexP }
                 iKselectedIndexState={ iKselectedIndexState }
                 iKselectedIndexSetState={ iKselectedIndexSetState }
             />
@@ -186,20 +176,10 @@ ReactDOM.render(<App />, document.getElementById('root'));
     +\ iKselectedIndexSetState is the setState() method for iKselectedIndexState property.
     +\ useState( null ) is the default value for the iKselectedIndexState property.
 2+ I could have use this useState() within the IkAccordion.js file instead since I am passing it as props, but I thought i leave it here
-3+ boolean value if this specific content accordion is currently being shown.
+3+ boolean value to specify if accordion content is currently being shown.
 4+ to determine if the user click is matching this specific accordion <h2> element title.
 5+ rerender IkAccordion component when iKindex or iKselectedIndexState is updated.
-6+ to determine if this specific accordion content is already open, and therefore close content when the user clicks again on the same <h2> element title.
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+6+ to determine if this specific accordion content is already open, and therefore close content when the user clicks again on the same <h2> element title. */
 
 
  /*OP */

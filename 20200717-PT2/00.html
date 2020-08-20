@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- useEffect() updates and using state in the first render with console.log() and jsx -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>00 useEffect() when updating and using state in the first render with console.log() and jsx</title>
+    <title>00 useEffect() updates and using state in the first render with console.log() and jsx</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -58,15 +53,9 @@
 'use strict';
 
 
-/*useEffect() when updating and using state in the first render with console.log() and jsx */
-/*iK interesting to watch out for that you get different output for console.log () and jsx.
+/*useEffect() updates and using state in the first render with console.log() and jsx */
+/*iK interesting to watch out for that you get different output for console.log () and jsx. */
 
-+\ 
-*/
-
-	/******/
-	/*App.js file*/
-	/******/
 const {useState, useEffect} = React;
 
 const App = () => {
@@ -74,39 +63,17 @@ const App = () => {
 
     useEffect( () => {
         iKsetState(2)
-        console.log(iKstate); /*OP 1 */
-    }, [] );
+        console.log(iKstate); /*OP 1 */ /*1+*/
+    }, [] ); /*2+*/
 
-    return <div>{ iKstate }</div>; /*OP 2 */ /*1+*/
+    return <div>{ iKstate }</div>; /*OP 2 */ /*3+*/
 }; /*END App */
-
-
-    /******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-
-/*1+ BIM however you get two render with jsx, the first output will be 1 but you get a second output of 2 in the end too.
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+/*1+ BIM console.log() gets only one render.
+2+ useEffect() is set to first render only.
+3+ jsx gets two render, the first is the default 1 value, and the second is the updated state value of 2 . */
 
 
  /*OP */

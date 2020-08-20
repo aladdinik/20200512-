@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Debounce throttling request api / only one request from the start / user typing search request after every 700ms -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>06 Debounce throttling request api / only one request from the start / typing search request after every 700ms</title>
+    <title>06 Debounce throttling request api / only one request from the start / user typing search request after every 700ms</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -58,18 +53,13 @@
 'use strict';
 
 
-/*Debounce throttling request api / only one request from the start / typing search request after every 700ms */
+/*Debounce throttling request api / only one request from the start / user typing search request after every 700ms */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ 
 +\ iK this is almost the same as the non-debounce throttling request api, but I use debounce method here.
-    +\ by using debounce method, I save one http request from the start. Where else non-debounce throttling request api would use two http request for the start.
+    +\ by using debounce method, I save one http request from the start. Where else non-debounce throttling request api would make two of the same http request for the start.
         +\ eg. first request for the folding page, and the second request (repeated request) for the setTimeout() setup.
             +\ but in this demo only one http request for the folding page.
-    +\ Also one of the main reason to also use debounce method is because it resolve missing dependency warning on console. Meaning beforehand you were using a dependency but you did not place the dependency within useState() second argument. However sometimes when you do place the dependency in the second argument than you could prevent optimum performance such as eg extra search request (this demo). Using debounce method will resolve both issues.
-+\ 
-+\ 
-+\ 
-*/
+    +\ Also one of the main reason to also use debounce method is because it resolve missing dependency warning on console. Meaning you were using a dependency but you did not place the dependency within useState() second argument. However sometimes when you do place the dependency in the second argument than you could prevent optimum performance such as eg extra search http request. Using debounce method will resolve both issues. */
 
 	/******/
 	/*App.js file*/
@@ -87,14 +77,14 @@ const App = props => {
             <input
                 type= 'text'
                 value={ iKsearchTextState }
-                onChange={event => iKsearchTextSetState( event.currentarget.value )}
+                onChange={event => iKsearchTextSetState( event.currentTarget.value )}
             />
             <IkSearchRequest
                 iKsearchTextState={ iKsearchTextState }
             />
         </div>
     ); /*END return */
-}; /*END App component*/
+}; /*END App */
 
 //    export default App;
 
@@ -113,7 +103,7 @@ const IkSearchRequest = ({ iKsearchTextState }) => { /*1+*/
     useEffect(() => {
         const iKdelayedRequest = setTimeout(() => {
             iKdebounceSearchTextSetState( iKsearchTextState ); /*3+*/
-        }, 2000);
+        }, 700);
 
         return () => clearTimeout( iKdelayedRequest );
     }); /*END useEffect() */
@@ -121,7 +111,7 @@ const IkSearchRequest = ({ iKsearchTextState }) => { /*1+*/
 
     useEffect(() => { 
         const iKsearchRequest = async () => {
-            if (iKsearchTextState === '') return null;
+            if ( !iKdebounceSearchTextState ) return null;
 
             const iKresponse = await axios.get( `https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=${ iKdebounceSearchTextState }` ); /*4+*/
 
@@ -147,7 +137,6 @@ const IkSearchRequest = ({ iKsearchTextState }) => { /*1+*/
     );
 }; /*END IkSearchRequest component */
 
-
 //    export default IkSearchRequest;
 
 
@@ -161,24 +150,12 @@ const IkSearchRequest = ({ iKsearchTextState }) => { /*1+*/
 ReactDOM.render(<App />, document.getElementById('root'));
 
 /*1+ I no longer need iKfoldingPageState state like I did for non-debounce method
-1+ VIP you will notice I need two useEffect for the component. First for setting setTimeout() to change the debounce state, along with cleanup function. And the second for making the http request if cleanup function is not invoke.
+1+ VIP you will notice I need two useEffect() for the component. First for setting setTimeout() to change the debounce state, along with cleanup function. And the second for making the http request if cleanup function is not invoke.
     +\ besides from the useEffect() changes, everything else remains mostly the same.
-2+ iKdebounceSearchTextState is exactly the same as iKsearchTextState , but is there for easier invoking the useEffect() when it changes.
+2+ iKdebounceSearchTextState is exactly the same as iKsearchTextState , but is there for easier invoking the useEffect() when user stop typing in the search box after 700ms.
 3+ if the user stops typing and cleanup function is not invoke than iKdebounceSearchTextState() is updated.
 4+ you could still use iKsearchTextState here, as that would work too.
-5+ BIM whenever iKdebounceSearchTextState is updated, than this useEffect http request will be invoke.
-
-6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+5+ BIM whenever iKdebounceSearchTextState is updated, than this useEffect() http request will be invoke. */
 
 
  /*OP */

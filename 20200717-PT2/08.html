@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Event bubbling and capturing with javascript and react -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -12,11 +12,6 @@
     <title>08 Event bubbling and capturing with javascript and react</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -60,21 +55,17 @@
 
 /*Event bubbling and capturing with javascript and react */
 /*VIP In react, .addEventListener() event bubbling will always take priority first before any react event bubbling.
-
 +\ using document.body.addEventListener() inside the useEffect() to listen outside the react component.
-    +\ iK however there are no other components in this demo, so you would not get output outside this component, but normally you would do in a normal project.
-+\ 
-*/
+    +\ iK however there are no other components in this demo, so you would not get output outside this demo component, but normally you would do in a normal project. */
 
 const {useEffect} = React;
 
-
 const App = () => {
     useEffect(() => {
-        document.body.addEventListener('click', () => { /*1+*/
-            console.log('iKdocument');
+        document.body.addEventListener( 'click', () => { /*1+*/
+            console.log( 'iKdocument' );
         });
-    }, []); /*END useEffect */ /*2+*/
+    }, [] ); /*END useEffect */ /*2+*/
 
     const iKparentDiv = () => { console.log('iKparentDiv') };
 
@@ -89,9 +80,9 @@ const App = () => {
 }; /*END App */
 
  /*OP (if you click on iKchildButton):
- iKdocument
- iKchildButton
- iKparentDiv
+    iKdocument
+    iKchildButton
+    iKparentDiv
  */ /*3+*/
 
 ReactDOM.render(<App />, document.getElementById('root'));
@@ -102,20 +93,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 1+ iK It also makes no difference if you set bubbling to true or false , as that only works with other javascript event, not react event.
 2+ iK you only need to render the .addEventListener() once, as it will stay there.
 3+ if you click on iparentDiv than output would be iKdocument > iKparentDiv .
-3+ if you click outside the component than there would be no output because document.body is within this whole component in this particular demo, however that would be different when you use other components too.
-4+
-5+
-6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+3+ if you click outside the component than there would be no output because document.body is within this whole component in this particular demo, however that would be different when you use other components too. */
 
 
  /*OP */
