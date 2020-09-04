@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>01</title>
+    <title>03</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
 /*---------------------- /style //////////////////////////*/
@@ -54,61 +54,129 @@
 'use strict';
 
 
-/*Simple url navigation page for each react components (non react-router) */
+/*Create navbar with anchor link elements / update and sync react component to match url window.location.pathname without refreshing the page / ability to open new tab by clicking control key / window.history.pushState() / popstate event / event.ctrlKey / event.metaKey */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK please note that this demo is not fully working properly on html project, such as pathname url. However it seems to work perfectly on spa cra.
-+\ Give each component their own separate url page just like react router would do.
-    +\ The gist here is you are mainly using window.location and conditional statement to give each component their own url page.
-        +/ one home page and two pathname page.
-    +\ iK you get the idea how react router mainly works, and their methods too. Such as <IkRoute iKpath=... /> is almost identical to react router method <Route path=... /> .
-    +\ iK I have shown two methods how you can route your components (but really they are both the same)
-        +\ third method is the javascript function method, which is not normally encourage to do with react as you want to create new functional component to pass your components.
-+\ iK surprisingly the url pathname string is case sensitive, which I did not expect. I think especially if the first character is not lower case.
-+\ iK I do not see any reason why you cannot do the similar method with pure javascript files. */
++\ iKdemo will show three links on page, and at the bottom will show the component you are currently on, which should always be in sync with the url (in address bar).
+    +\ under the hood React-router would work almost exactly the same way as the iKdemo, but we are showing the purest javascript react navigation as possible here.
+    +\ iK remember you are on file /03.html so you will see this place on the pathname string in this demo, otherwise normally it would not be there.
++\ key things in the iKdemo: prevent page refresh so that we do not have to reload assets files again / update the url pathname (address bar) to keep in sync with the component currently shown / created a popstate event and dispatched it (when you click on a anchor link) so that all the react component will detect the url (address bar) has changed and render the correct component.
+    +\ iK an extra addition but not vital for the iKdemo, user can also press control key + click on a anchor link to open a new tab for it.
+    +\ iK? however I suspect this method loads every react components (even the ones that are not displaying on the current url) and files in the fold page, so therefore the intial load could possibly take a while, but once it is loaded, than there will be nothing else to load, so clicking onto a different component page link appears instant to the user.
++\ iK on stephen grider video there appeared to be a minor error on the console saying a possible memory leak despite everything working accordingly. You should be aware of it despite it not showing up in this iKdemo. However the error occured on his search component, so you might have nothing to do with it either. 
++\ App.js / IkNavHeader1.js / IkLink1.js / IkRoute1.js / IkHome1.js / IkPathname1.js / IkPathname2.js / index.js */
 
 	/******/
 	/*App.js file*/
 	/******/
 //    import React from 'react';
 
+//    import IkNavHeader1 from './IkNavHeader1.js';
 //    import IkRoute1 from './IkRoute1.js';
 //    import IkHome1 from './IkHome1.js';
 //    import IkPathname1 from './IkPathname1.js';
 //    import IkPathname2 from './IkPathname2.js';
 
-const App = () => {
-    const iKpathnamePage2 = () => { /*1+*/
-        return window.location.pathname === '/01.html/ikPathname2' /*2+*/
-            ? <IkPathname2 /> /*3+*/
-            : null;
-    }; /*END iKpathnamePage2 */
+const App = () => ( /*1+*/
+    <div>
+        <IkNavHeader1 />
 
-    return ( /*4+*/
-        <div>
-            <IkRoute1 iKpath='/01.html' >
-                <IkHome1 />
-            </IkRoute1>
+        <IkRoute1 iKpath='/03.html' >
+            <IkHome1 />
+        </IkRoute1>
 
-            <IkRoute1 iKpath='/01.html/ikPathname1' > 
-                <IkPathname1 />
-            </IkRoute1>
+        <IkRoute1 iKpath='/03.html/ikPathname1' > 
+            <IkPathname1 />
+        </IkRoute1>
 
-            { iKpathnamePage2() }
-        </div>
-    ); /*END return */
-}; /*END App */
+        <IkRoute1 iKpath='/03.html/ikPathname2' > 
+            <IkPathname2 />
+        </IkRoute1>
+    </div>
+); /*END App */
 
 //    export default App;
 
 
 	/******/
+	/*IkNavHeader1.js file*/
+	/******/
+//    import React from 'react';
+
+//    import IkLink1 from './IkLink1.js';
+
+const IkNavHeader1 = () => ( /*2+*/
+    <nav>
+        <IkLink1 iKhref='/03.html'>
+            IkHome1 page link
+        </IkLink1> <br/>
+
+        <IkLink1 iKhref='/03.html/ikPathname1' >
+            IkPathname1 page link
+        </IkLink1> <br/>
+
+        <IkLink1 iKhref='/03.html/ikPathname2' >
+            IkPathname2 page link
+        </IkLink1>
+    </nav>
+); /*END IkNavHeader1 */
+
+//    export default IkNavHeader1;
+
+
+	/******/
+	/*IkLink1.js file*/
+	/******/
+//    import React from 'react';
+
+const IkLink1 = ({ iKhref, children }) => {
+    const iKonAnchorClick = event => {
+        if (event.ctrlKey || event.metaKey) { /*3+*/
+            return; /*4+*/
+        };
+
+        event.preventDefault(); /*5+*/
+
+        window.history.pushState({}, '', iKhref); /*6+*/
+
+        const iKpopStateEvent = new PopStateEvent( 'popstate' ); /*7+*/
+
+        window.dispatchEvent( iKpopStateEvent ); /*8+*/
+    }; /*END iKonAnchorClick */
+
+    return (
+        <a  href={ iKhref }
+            onClick={ iKonAnchorClick }
+        >{ children }</a>
+    ); /*END return */
+}; /*END IkLink1 */
+
+//    export default IkLink1;
+
+
+	/******/
 	/*IkRoute1.js file*/
 	/******/
-const IkRoute1 = ({ iKpath, children }) => ( /*5+*/
-    window.location.pathname === iKpath
+//    import {useEffect, useState} from 'react';
+const {useEffect, useState} = React;
+
+const IkRoute1 = ({ iKpath, children }) => {
+    const [iKcurrentUrlPathnameState, iKcurrentUrlPathnameSetState] = useState( window.location.pathname );
+
+    useEffect(() => {
+        const iKurlPathNameChanged = event => { /*9+*/
+            iKcurrentUrlPathnameSetState( window.location.pathname );
+            console.log( event ); /*OP: PopStateEvent object */
+        };
+
+        window.addEventListener( 'popstate', iKurlPathNameChanged ); /*10+*/
+
+        return () => window.removeEventListener( 'popstate', iKurlPathNameChanged ); /*11+*/
+    }, []); /*END useEffect */
+
+    return iKcurrentUrlPathnameState === iKpath
         ? children
-        : null
-); /*END IkRoute1 */
+        : null;
+}; /*END IkRoute1 */
 
 //    export default IkRoute1;
 
@@ -119,7 +187,7 @@ const IkRoute1 = ({ iKpath, children }) => ( /*5+*/
 //    import React from 'react';
 
 const IkHome1 = () => (
-    <div>iK IkHome1 working</div>
+    <div>iK currently on: IkHome1</div>
 ); /*END IkHome1 */
 
 //    export default IkHome1;
@@ -131,7 +199,7 @@ const IkHome1 = () => (
 //    import React from 'react';
 
 const IkPathname1 = () => (
-    <div>iK IkPathname1 working</div>
+    <div>iK currently on: IkPathname1</div>
 ); /*END IkPathname1 */
 
 //    export default IkPathname1;
@@ -143,7 +211,7 @@ const IkPathname1 = () => (
 //    import React from 'react';
 
 const IkPathname2 = () => (
-    <div>iK IkPathname2 working</div>
+    <div>iK currently on: IkPathname2</div>
 ); /*END IkPathname2 */
 
 //    export default IkPathname2;
@@ -159,12 +227,24 @@ const IkPathname2 = () => (
 ReactDOM.render(<App />, document.getElementById('root'));
 
 
-/*1+ setting up IkPathname2 component to its own separate url page.
-2+ '/01.html...' is necessary for html project. However its still does not work on html project for some reason, which I do not understand why.
-3+ As usual you can pass props if the components needs it.
-
-4+ <IkRoute1> is just like react-router <Route> , in that you place your url path string and component to create separate url page.
-5+ no import react needed on this file component because we are not using jsx. Only javascript object or null is being returned. */
+/*1+ <IkNavHeader1 /> contains three anchor links to the component pages.
+2+ iK it was not necessary to use <IkLink1/> component as I could have done it all here within this component, but wanted to show the similarity between react router <Link/> .
+3+ allows you to press control key + click to open new tab.
+    +\ BIM event.ctrlKey is Window keyboard and event.metaKey is Apple keyboard.
+    +\ iK bizarly the pathname components  does not work with html project. But it works fine on cra .
+4+ we return early because the user is heading to a new tab page, therefore it will need to load every asset files again.
+    +\ It would not be good to prevent page refresh on a new tab and etc.. 
+5+ prevents page refresh.
+6+ this allows you to overwrite and update the url in the browser address bar.
+    +\ combine with event.preventDefault() , it will appear instant in the address bar without refreshing page.
+7+ created a popstate object event which would detect window.history url changing.
+8+ use .dispatchEvent() for executing the iKpopStateEvent object to be live on window document.
+    +\ so now iKpopStateEvent is live,it will send out a popstate event object to window everytime window.history changes.
+        +\ the object data will also include the updated data about window.location.pathname which you need for this iKdemo.
+9+ for updating state when popstate event (updated window.history ) is detected with the new and updated window.location.pathname .
+10+ when user clicks on anchor links, it will detect your create popstate object event.
+    +\ including the updated url address bar (using the window.history.pushState() ).
+11+ remove event listener for non matching url components . */
 
 
  /*OP */
