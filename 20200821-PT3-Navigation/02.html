@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Prevent page reload when clicking on anchor element -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>02 Prevent page reload when clicking on anchor element</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -59,56 +54,36 @@
 'use strict';
 
 
-/* */
-/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
+/*Prevent page reload when clicking on anchor element */
+/* Normally when anchor element link is clicked on, it refreshes the page and loads to the link address, however we prevent it with event.preventDefault() so that we can stay on the page and not refresh.
+    +/ It is useful so that we do not have to reload the page assets again if you are looking to load to a different url pathname on your website.
+    +\ iK however this demo is not complete because we still need to update the url address bar with the new pathname, and than we would need to upload the pathname page too.
+        +\ iK so I used a dummy href here and nothing will be uploaded. this demo is to only show that we prevent page reload and that we can still do things.
+            +\ iK this demo only prevents reload and increment state number. */
 
-+\ 
-*/
+const {useState} = React;
 
-	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
-	/******/
-	/*App.js file*/
-	/******/
+
 const App = () => {
+    const [iKstate, iKsetState] = useState(123);
+
+    const divButton = event => {
+        event.preventDefault();
+        iKsetState( iKstate + 1 );
+        console.log('iK incremented state value');
+    };
+
     return (
-        <div>iK App working</div>
+        <div>
+            <a  onClick={ divButton }
+                href='#'
+            >{iKstate }</a>
+        </div>
     );
 }; /*END App */
-	/******/
-	/*IkFile1.js file*/
-	/******/
-	/******/
-	/*index.js file*/
-	/******/
-//	import React from 'react';
-//	import ReactDOM from 'react-dom';
-//	import App from './App';
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
-
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
 
 
  /*OP */

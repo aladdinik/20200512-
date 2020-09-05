@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- Simple url navigation page for each react components (non react-router) -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title></title>
+    <title>01 Simple url navigation page for each react components (non react-router)</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -59,30 +54,101 @@
 'use strict';
 
 
-/* */
+/*Simple url navigation page for each react components (non react-router) */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
-+\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
++\ iK please note that this demo is not fully working properly on html project, such as pathname url. However it seems to work perfectly on spa cra.
++\ Give each component their own separate url page just like react router would do.
+    +\ The gist here is you are mainly using window.location and conditional statement to give each component their own url page.
+        +/ one home page and two pathname page.
+    +\ iK you get the idea how react router mainly works, and their methods too. Such as <IkRoute iKpath=... /> is almost identical to react router method <Route path=... /> .
+    +\ iK I have shown two methods how you can route your components (but really they are both the same)
+        +\ third method is the javascript function method, which is not normally encourage to do with react as you want to create new functional component to pass your components.
++\ iK surprisingly the url pathname string is case sensitive, which I did not expect. I think especially if the first character is not lower case.
++\ iK I do not see any reason why you cannot do the similar method with pure javascript files. */
 
-+\ 
-*/
-
-	/******/
-	/*iKactionCreators.js file*/
-	/******/
-	/******/
-	/*iKreducers.js file*/
-	/******/
 	/******/
 	/*App.js file*/
 	/******/
+//    import React from 'react';
+
+//    import IkRoute1 from './IkRoute1.js';
+//    import IkHome1 from './IkHome1.js';
+//    import IkPathname1 from './IkPathname1.js';
+//    import IkPathname2 from './IkPathname2.js';
+
 const App = () => {
-    return (
-        <div>iK App working</div>
-    );
+    const iKpathnamePage2 = () => { /*1+*/
+        return window.location.pathname === '/01.html/ikPathname2' /*2+*/
+            ? <IkPathname2 /> /*3+*/
+            : null;
+    }; /*END iKpathnamePage2 */
+
+    return ( /*4+*/
+        <div>
+            <IkRoute1 iKpath='/01.html' >
+                <IkHome1 />
+            </IkRoute1>
+
+            <IkRoute1 iKpath='/01.html/ikPathname1' > 
+                <IkPathname1 />
+            </IkRoute1>
+
+            { iKpathnamePage2() }
+        </div>
+    ); /*END return */
 }; /*END App */
+
+//    export default App;
+
+
 	/******/
-	/*IkFile1.js file*/
+	/*IkRoute1.js file*/
 	/******/
+const IkRoute1 = ({ iKpath, children }) => ( /*5+*/
+    window.location.pathname === iKpath
+        ? children
+        : null
+); /*END IkRoute1 */
+
+//    export default IkRoute1;
+
+
+	/******/
+	/*IkHome1.js file*/
+	/******/
+//    import React from 'react';
+
+const IkHome1 = () => (
+    <div>iK IkHome1 working</div>
+); /*END IkHome1 */
+
+//    export default IkHome1;
+
+
+	/******/
+	/*IkPathname1.js file*/
+	/******/
+//    import React from 'react';
+
+const IkPathname1 = () => (
+    <div>iK IkPathname1 working</div>
+); /*END IkPathname1 */
+
+//    export default IkPathname1;
+
+
+	/******/
+	/*IkPathname2.js file*/
+	/******/
+//    import React from 'react';
+
+const IkPathname2 = () => (
+    <div>iK IkPathname2 working</div>
+); /*END IkPathname2 */
+
+//    export default IkPathname2;
+
+
 	/******/
 	/*index.js file*/
 	/******/
@@ -93,22 +159,12 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 
 
-/*1+
-2+
-3+
-4+
-5+
-6+
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+/*1+ setting up IkPathname2 component to its own separate url page.
+2+ '/01.html...' is necessary for html project. However its still does not work on html project for some reason, which I do not understand why.
+3+ As usual you can pass props if the components needs it.
+
+4+ <IkRoute1> is just like react-router <Route> , in that you place your url path string and component to create separate url page.
+5+ no import react needed on this file component because we are not using jsx. Only javascript object or null is being returned. */
 
 
  /*OP */
