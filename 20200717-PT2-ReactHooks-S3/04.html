@@ -62,15 +62,18 @@ const {useState, useEffect} = React;
 const App = props => {
     const [iKstatusCodeState, iKstatusCodeSetState] = useState(0);
 
-    useEffect( () => {
-        const iKinnerFunction = async () => { /*1+*/
-            const iKresponse = await axios.get( "https://jsonplaceholder.typicode.com/posts" );
+    useEffect( 
+        () => {
+            const iKinnerFunction = async () => { /*1+*/
+                const iKresponse = await axios.get( "https://jsonplaceholder.typicode.com/posts" );
 
-            iKstatusCodeSetState( iKresponse.status );
-        };
+                iKstatusCodeSetState( iKresponse.status );
+            };
 
-        iKinnerFunction(); /*2+*/
-    }, [] ); /*END useEffect */ /*3+*/
+            iKinnerFunction(); /*2+*/
+        },
+        [] /*3+*/
+    ); /*END useEffect */
 
     return (<h1>{ iKstatusCodeState }</h1>);
 }; /*END App */
@@ -78,8 +81,8 @@ const App = props => {
 ReactDOM.render(<App />, document.getElementById('root'));
 
 /*1+ VIP in a useEffect() use a inner function if you want to do request using async function.
-    +\ iKVIP however when I tried it, async function still work if you do not use inner function, which I find strange because stephen grider said and showed that error would occur if you use async function on the outer function of useEffect() .
-    +\ BIM alternatively your inner function could also be invoking function (() => {...})() or thenable handler, or you could create your async function outside useEffect() and invoke it inside useEffect() .
+    +\ iKVIP however when I tried it, async function still work if you do not use inner function, which I find strange because stephen grider said and showed that error would occur if you use async function on the outer function parameter of useEffect() .
+    +\ BIM alternatively your inner function could also be an invoking function (() => {...})() or thenable handler, or you could create your async function outside useEffect() and invoke it inside useEffect() .
 2+ BIM do not forget to invoke the inner function.
 3+ useEffect() is set to only run at the first render. */
 

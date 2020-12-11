@@ -95,6 +95,7 @@ setTimeout(() => console.clear(), 500); /*iK ignore this, for convenience */
 /*1+ setting the click event to capturing phrase.
 2+ If you click on the iKchildButton button, the capturing event (iKparentDiv) is invoke first, and than the other elements will event bubble outwards normally.
     +\ VIP without capturing phrase, it would always start from child element towards parents elements, so output would be iKchildButton > iKparentDiv > iKdocument.
+    +\ iK ideal if you want a specific event to trigger first before the other events.
 2+ if you click on iKparentDiv than output would be: iparentDiv > iKdocument
 2+ if you click on iKdocument than output would be: iKdocument  */
 

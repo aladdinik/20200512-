@@ -51,8 +51,8 @@
 /* I got this api from stephen api, it searches for wikipedia page.
     +\ you only get list of 10 items in the array.
 +\ https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=lion
-    +\ srsearch params is where you put what you are searching for.
-        +\ you then collect the pageId value from the response object and place it in the wiki url query string curid params to get that specific webpage.
+    +\ 'srsearch' params is where you put what you are searching for.
+        +\ you then collect the 'pageId' value from the response object and place it in the wiki url query string 'curid' params to get that specific webpage.
             +\ https://en.wikipedia.org/?curid=36896 =iKeg iK pageId for curid to get lion wikipedia. */
 
 const iKwikipediaApi = async () => {
@@ -73,7 +73,7 @@ const iKwikipediaApi = async () => {
 
 iKwikipediaApi();
 
-/*1+ the srsearch params is where you enter text of what you are searching for.
+/*1+ the 'srsearch' params is where you enter text of what you are searching for.
     +\ iK I am currently searching for bicycle, but you can create a input text to change that.
 2+ array of 10 items
 3+ outputs a short summary of the search. Some contains span element tags too, so you might need to use .innerHTML or regular expression to rid of those span tag. 
