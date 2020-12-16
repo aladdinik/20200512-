@@ -59,7 +59,7 @@
     +\ by using debounce method, I save one http request from the start. Where else non-debounce throttling request api would make two of the same http request for the start.
         +\ eg. first request for the folding page, and the second request (repeated request) for the setTimeout() setup.
             +\ but in this demo only one http request for the folding page.
-    +\ Also one of the main reason to also use debounce method is because it resolve missing dependency warning on console. Meaning you were using a dependency but you did not place the dependency within useState() second argument. However sometimes when you do place the dependency in the second argument than you could prevent optimum performance such as eg extra search http request. Using debounce method will resolve both issues. */
+    +\ Also one of the main reason to also use debounce method is because it resolve missing dependency warning on console. Meaning you were using a dependency but you did not place the dependency within useEffect() second argument. However sometimes when you do place the dependency in the second argument than you could prevent optimum performance such as eg extra search http request. Using debounce method will resolve both issues. */
 
 	/******/
 	/*App.js file*/

@@ -64,7 +64,7 @@ const App = () => {
     useEffect(() => {
         document.body.addEventListener( 'click', () => { /*1+*/
             console.log( 'iKdocument' );
-        });
+        }, {capture: true}); /*iKUPDATED20201216+*/
     }, [] ); /*END useEffect */ /*2+*/
 
     const iKparentDiv = () => { console.log('iKparentDiv') };
@@ -91,6 +91,12 @@ ReactDOM.render(<App />, document.getElementById('root'));
 /*1+ BIM it would not be the same result if you use document. , as it then treats .addEventListener() like react event and place it in normal react event order.
     +\ But using document.body.addEventListener() changes the order and takes priority first over any other react event.
 1+ iK It also makes no difference if you set bubbling to true or false , as that only works with other javascript event, not react event.
+iKUPDATED20201216+ in React v17 you will need to include the capture property to true for it to work accordingly, otherwise it might not work as expected.
+    +\ iK? I have not personally tested this on the React v17, but according to stephen (updated) this will work.
+    +\ iK? It is strange because than I am thinking javascript .eventListener() default bubbling phase (false) will not work, and will work just like any react bubbling, instead of always being first.
+        +\ iK? so you will have to set js .eventListener() capture phase to true of it to go first everytime.
+            +\  iKVIP? apparently from what I read a bit, reactV17 has fix an issue and now js .eventListener() (js event) will go in the same order as every other react event listener, and you will need to change the usercapture phase yourself if you want js event to go first.
+                +\ iKVIP? So if this is true, than most of this topic I have mention that js event go first is void. But still read on and realise reactV17 has changed this, otherwise most things still applies.
 2+ iK you only need to render the .addEventListener() once, as it will stay there.
 3+ if you click on iparentDiv than output would be iKdocument > iKparentDiv .
 3+ if you click outside the component than there would be no output because document.body is within this whole component in this particular demo, however that would be different when you use other components too. */

@@ -109,7 +109,9 @@ const IkAddEventListener = ({ iKbooleanSetState }) => {
 
     useEffect(() => {
         const iKeventListenerCallBack = event => { /*8+*/
-            if( iKbuttonRef.current.contains( event.target ) ) { /*9+*/
+            if( iKbuttonRef.current && iKbuttonRef.current.contains( event.target ) ) { /*9+*/ /*+iKUPDATED20201216VIP+*/
+                console.log( iKbuttonRef.current ); /*OP <button>...</button> */
+                console.log( iKbuttonRef.current.contains(event.target) ); /*OP true */
                 return; /*10*/
             };
 
@@ -149,6 +151,8 @@ ReactDOM.render(<App />, document.getElementById('root'));
 8+ creating a function callback is easier to insert both .addEventListener() and .removeEventListener() .
 9+ true if event.target is also iKbuttonRef or any of its descendants.
 9+ You could have also use iKbuttonRef as the parent element (event delegation).
++iKUPDATED20201216VIP+ 'iKbuttonRef.current &&' - I have included this code in because reactV17 (or later) requires it otherwise you will get error message on console.
+    +\ iK? and it turns out you no longer need 'iKbuttonRef.current.contains( event.target )' in the conditional statement as it works without it, 'iKbuttonRef.current' is good enough to do the job.
 10+ so if clicking on the iKbuttonRef element, than return nothing, as there is nothing we want to do here.
 11+ if clicking is not iKbuttonRef element than change iKbooleanState to false.
     +\ basically you will now be clicking every other element that is not iKbuttonRef element, which is where document.body. comes in.
