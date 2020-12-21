@@ -59,7 +59,7 @@
 'use strict';
 
 
-/*The basics of a newly created custom hook for codes only */
+/*The basics of a newly created custom reusable hook for codes only */
 /* iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 
 
@@ -70,8 +70,9 @@
 +\ Beside from using components to create reusable components, you can use custom hooks to create reusable codes without any jsx.
     +\ custom hooks always use at least one hook code (eg. useEffect() ) to create a custom hook function.
         +\ custom hooks are great for data-fetching, or sending another copy to an analytical function to observe user usage and etc...
+        +\ custom hook are almost identical to a regular js function beside from using one hook to differentiate it.
     +\ a good tip is to ask what reusable hooks should do, so 'if you give reusuable hooks a certain value, than the resusable hook will return a certain type of value.
-        +\  eg. you plan on using youtube api several times on different component, than it would be better to create one custom hook to return the youtube response object.
+        +\  eg. you plan on using youtube api several times on different components, than it would be better to create one custom hook to return the youtube response object.
 +\ 
 +\ 
 */
@@ -95,12 +96,10 @@ const App = () => {
         console.log( iKcusHookArraySearchListState );
     }, [iKcusHookArraySearchListState]);
 
-
     const iKonSubmit = event => {
         event.preventDefault();
         iKcusHookSearchRequestFunction( iKinputRef.current.value ); /*2+*/
     };
-
 
     return (
         <div>
@@ -122,24 +121,23 @@ const App = () => {
 	/******/
 	/*useIkCustomHook1.js file*/
 	/******/
-//    import React, {useState} from 'react';  /*3+*/
+//    import React, {useState, useEffect} from 'react';  /*3+*/
 //    import axios from 'axios';
 
 const useIkCustomHook1 = iKsearchTextInitialDefaultValueP => {
     const [ iKcusHookArraySearchListState, iKcusHookArraySearchListSetState ] = useState([]);
 
-    useEffect(() => {
+    useEffect(() => { /*4+*/
         iKcusHookSearchRequestFunction( iKsearchTextInitialDefaultValueP );
-    }, []); /*4+*/
+    }, []);
 
-    const iKcusHookSearchRequestFunction = async ( iKsearchTextP ) => {
+    const iKcusHookSearchRequestFunction = async ( iKsearchTextP ) => { /*5+*/
         const iKresponse = await axios.get( `https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&format=json&srsearch=${ iKsearchTextP }` );
 
         iKcusHookArraySearchListSetState( iKresponse.data.query.search );
     }; /*END iKsearchListArray1 */
 
-
-    return [iKcusHookArraySearchListState, iKcusHookSearchRequestFunction];
+    return [iKcusHookArraySearchListState, iKcusHookSearchRequestFunction]; /*6+*/
 }; /*END useIkCustomHook1 */
 
 
@@ -154,15 +152,19 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 
 /*1+ BIM you can think of useIkCustomHook1 as useState() hook: const [iKstate, iKsetState] = useState(iKinitialState);
-    +\ this is why you are recommended to use the word 'use...' infront of your custom hook so you and other developers will know this is a custom hook you created.
+    +\ you are recommended to use the word 'use...' infront of your custom hook so you and other developers will know this is a custom hook you created.
     +\ this is how most of react hook tend to work, especially useState() .
     +\ BIM however you do not have to use custom hook as useState() , you can return as many items/objects/function/values/etc... as you want. whatever makes sense for your project needs.
-2+ Using the custom hook function to make ajax request from the search text.
+2+ Using the custom hook function to make ajax request from the search text. This will return a new iKcusHookArraySearchListState value .
 3+ A custom hook is when you use one or more of react hook within the function. It returns only codes, and no jsx or components.
-4+ '' and 'kratos' would be on the first render (on the console.log() ).
+4+ '' and 'kratos' would be on the default array value on the first render (on the console.log() ).
     +\ iK remember because it is asynchronous, you get two render when the page first loads.
-5+
-6+
+    +\ this is optional, only if you want there to be a value when the page first load.
+5+ Is the actual asynchronous function to reassign the iKcusHookArraySearchListState value .
+    +\ The function itself will be returned for other components to use this function if they want to change the iKcusHookArraySearchListState value (thats only held within this custom hook file) such as entering a new search text.
+6+ notice the custom hook returns a state value and a function for other components to use.
+    +\ this is the basis of a custom hook, allowing you to free up more space from repeating coding on your main component file just like any regular js function is suppose to do.
+6+ returning your values in array is the react way, but you can return object literal (or other primitive value) instead if you wish too.
 7+
 8+
 9+
