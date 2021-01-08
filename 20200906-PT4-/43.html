@@ -58,7 +58,7 @@
 'use strict';
 
 
-/* */
+/* IK TESTING AND LAYING OUT GOOGLE SIGN IN WITH REACT REDUX */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 
@@ -69,20 +69,43 @@
 	/******/
 	/*iKactionCreators.js file*/
 	/******/
+/*
+iKgoogleAuth2object_AC
+iKsignIn_AC
+    payload: clientId / email
+iKsignOut_AC
+
+*/
 	/******/
 	/*iKreducers.js file*/
 	/******/
+/*
+iKgoogleObject_Reducer = {
+    iKgoogleAuth2object: ...,
+    iKgoogleSignInStatus: ...,
+    iKgoogleUserClientId: ...,
+    iKgoogleUserEmail: ...
+}
+*/
 	/******/
 	/*App.js file*/
 	/******/
+/*
+- call iKgoogleAuth2object_AC to create the auth2 object with your client Id 
+*/
 const App = () => {
     return (
         <div>iK App working</div>
     );
 }; /*END App */
 	/******/
-	/*IkFile1.js file*/
+	/*KgoogleOauthSignInButton.js file*/
 	/******/
+/*
+-signin button
+-signout button
+- .listen() --iK listen for sign in status changes.
+*/
 	/******/
 	/*index.js file*/
 	/******/
