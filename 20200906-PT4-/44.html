@@ -74,7 +74,17 @@
 	/******/
 	/*App.js file*/
 	/******/
+const {useEffect} = React;
+
 const App = () => {
+    useEffect(() => {
+        console.log(1)
+    }, [])
+
+    useEffect(() => {
+        console.log(2)
+    }, [])
+
     return (
         <div>iK App working</div>
     );
