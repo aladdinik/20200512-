@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- 02 Handling Authentication with Google oAuth browser library / Google sign-in -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>02</title>
+    <title>02 Handling Authentication with Google oAuth browser library / Google sign-in</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -69,11 +64,7 @@
     +\ It thans confirms if user is signed in or not with google by outputing boolean value onto console.log() and sign in button changes text too.
 +\ You first need to set up a google account project console with oAuth consent screen and credentials. Also you will need to include url's restriction for it to work on.
     +\ when done creating the project you will get a unique google clientId and client secret which is similar to a api key.
-        +\ iK however you will only need the clientId for oAuth js browser, because client secret is for oAuth servers.
-+\ 
-+\ 
-+\ 
-*/
+        +\ iK however you will only need the clientId for oAuth js browser, because client secret is for oAuth servers. */
 
 	/******/
 	/*App.js file*/
@@ -211,14 +202,7 @@ ReactDOM.render(
 14+ iK I only use setTimeout() to give the user/asynchronous time to sign in or out and therefore we can get an accurate google sign in status.
 15+ iK I could instead outputted the actual jsx button, but I went with text for this demo.
     +\ also you could have use actual google icons and colour.
-        +\ easier to get these from css libraries such as semantic-ui or bootstrap.
-16+
-17+
-18+
-19+
-20+
-21+
-*/
+        +\ easier to get these from css libraries such as semantic-ui or bootstrap. */
 
 
  /*OP */

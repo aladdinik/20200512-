@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- 03 Handling Authentication with Google oAuth browser library with Redux / collect user Google sign-in status | clientId | email onto redux store -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>03</title>
+    <title>03 Handling Authentication with Google oAuth browser library with Redux / collect user Google sign-in status | clientId | email onto redux store</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -66,13 +61,11 @@
     +\ iK however Google sign-in will not work in this html project demo because you need to use a localhost server to work. You can use the spa version if you still got it or you can copy & paste it onto a SPA to test it out and the localhost server should work fine.
         +\ but it will only work if you still have the '210105-GSignInOauthTESTING' google console project.
 +\ iK this demo works almost the same as 02.html. Differences is I use redux, and also collect the user clientId and email.
+    +\ iK you will only see the sign in button change, no console.log(). However you can look at redux devtool to see the redux store changing.
     +\ I redid the whole demo again though so variable names could be different than in 02.html .
     +\ iK it took me a few days to complete this as it was a lot harder than I thought it would be. I tried to do it the tradional redux way and implement the main codes through action creator which I did succeed, but it was tricky and there is a catch as you will see in the codes (as explain below).
         +\ the easier way would have just to leave the google auth object in the google react component and bring that to redux.
-            +\ but traditional way of redux is to do majority of codes in the action creator (stephen said this), so this is what I did. I did the google oAuth coding in the action creator and the google react component would collect redux store data and did anything else using the action creators.
-+\ 
-+\ 
-*/
+            +\ but traditional way of redux is to do majority of codes in the action creator (stephen said this), so this is what I did. I did the google oAuth coding in the action creator and the google react component would collect redux store data and did anything else using the action creators. */
 
 	/******/
 	/* ./Redux-Store/kStore.js.js file*/
@@ -402,16 +395,7 @@ ReactDOM.render(
 4+ if user was already signed in, than iKgoogleAuth2InstanceP.currentUser.get().getId() would be true, otherwise it would be undefined .
 5+ the .getEmail() does not work at all here as it causes error. It seems you first need the .getBasicProfile() .
 6+ no need to worry about updating the sign-in status because the AC listener will do that for us automatically.
-7+ The console warning told me to put these dependencies, I did not want to because I think it is better to mount them once when the webpage first loads.
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+7+ The console warning told me to put these dependencies, I did not want to because I think it is better to mount them once when the webpage first loads. */
 
 
  /*OP */

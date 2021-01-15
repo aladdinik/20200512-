@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- description -->
+<html lang="en"> <!-- 01 The basics of a newly created custom reusable hook for codes only / axios -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,14 +9,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
-    <title>01</title>
+    <title>01 The basics of a newly created custom reusable hook for codes only / axios</title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
-
-
-/**/
-
-
 /*---------------------- /style //////////////////////////*/
 </style>
 </head>
@@ -61,21 +56,16 @@
 
 /*The basics of a newly created custom reusable hook for codes only / axios */
 /* iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
-
-
 +\ iK Demo of a simple search box that returns a ajax response array of wikipedia content on the console.log() .
     +\ iK The demo custom hook returns an array (contains two items: the array response object and a function callback to use) using asynchronous code (axios)
     +\ Demo shows a reusable hook with a specific ajax code which can be use by any components/files/js.
-+\ 
 +\ Beside from using components to create reusable components, you can use custom hooks to create reusable codes without any jsx.
     +\ custom hooks always use at least one hook code (eg. useEffect() ) to create a custom hook function.
         +\ custom hooks are great for data-fetching, or sending another copy to an analytical function to observe user usage and etc...
         +\ custom hook are almost identical to a regular js function beside from using one hook to differentiate it.
     +\ a good tip is to ask what reusable hooks should do, so 'if you give reusuable hooks a certain value, than the resusable hook will return a certain type of value.
-        +\  eg. you plan on using youtube api several times on different components, than it would be better to create one custom hook to return the youtube response object.
-+\ 
-+\ 
-*/
+        +\  eg. you plan on using youtube api several times on different components, than it would be better to create one custom hook to return the youtube response object. */
+
 	/******/
 	/*App.js file*/
 	/******/
@@ -165,17 +155,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
     +\ The function itself will be returned for other components to use this function if they want to change the iKcusHookArraySearchListState value (thats only held within this custom hook file) such as entering a new search text.
 6+ notice the custom hook returns a state value and a function for other components to use.
     +\ this is the basis of a custom hook, allowing you to free up more space from repeating coding on your main component file just like any regular js function is suppose to do.
-6+ returning your values in array is the react way, but you can return object literal (or other primitive value) instead if you wish too.
-7+
-8+
-9+
-10+
-11+
-12+
-13+
-14+
-15+
-*/
+6+ returning your values in array is the react way, but you can return object literal (or other primitive value) instead if you wish too. */
 
 
  /*OP */
