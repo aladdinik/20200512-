@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
     <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
 <!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <title></title>
 <style>
 /* + + + + + + + + + + + STYLE ---------------------------*/
@@ -33,6 +34,7 @@
 
 <!-- index.html file (VIP for CRA) -->
 <div id="root"></div>
+<div id="modal"></div>
 
 
 <!---------------------- /main /////////////////////////-->
@@ -62,7 +64,7 @@
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 
-+\ 
++\ zzzzzzzzzzzzzzz give setState is undefine, so first set that as a variable than see what happens next.
 */
 
 	/******/
@@ -75,13 +77,70 @@
 	/*App.js file*/
 	/******/
 const App = () => {
+
+
     return (
-        <div>iK App working</div>
+        <div>iK App working
+            <Modal
+                title="iKtitle"
+                content="iKcontent"
+                action="iKaction is suppose to be buttons"
+                onDismiss={() => "iKdismiss"}
+            />
+        </div>
     );
 }; /*END App */
+
+
+    /******/
+	/*Modal.js file*/
 	/******/
-	/*IkFile1.js file*/
-	/******/
+//import React from 'react';
+//import ReactDOM from 'react-dom';
+ 
+class Modal extends React.Component {
+  state = { open: false };
+ 
+  onDismiss() {
+    this.setState({ open: false });
+    this.props.onDismiss();
+  }
+ 
+  renderModal() {
+    if (!this.state.open) {
+      return null;
+    }
+ 
+    return ReactDOM.createPortal(
+      <div onClick={this.onDismiss} className="ui dimmer modals visible active">
+        <div
+          onClick={e => e.stopPropagation()}
+          className="ui standard modal visible active"
+        >
+          <div className="header">{this.props.title}</div>
+          <div className="content">{this.props.content}</div>
+          <div className="actions">{this.props.actions}</div>
+        </div>
+      </div>,
+      document.querySelector('#modal')
+    );
+  }
+ 
+  render() {
+    return (
+      <div>
+        <button onClick={() => this.setState({ open: true })}>
+          Open Modal
+        </button>
+        {this.renderModal()}
+      </div>
+    );
+  }
+}
+ 
+//export default Modal;
+
+
 	/******/
 	/*index.js file*/
 	/******/
