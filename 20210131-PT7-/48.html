@@ -74,11 +74,15 @@
 	/******/
 	/*App.js file*/
 	/******/
-const App = () => {
-    return (
-        <div>iK App working</div>
-    );
-}; /*END App */
+const App = () => (
+    <div onClick={() => console.log('iKclick1')}>
+        iKclick1
+
+        <div onClick={event => event.stopPropagation()}> /*1+*/
+            <button onClick={() => console.log('iKclick2')}>iKclick2</button>
+        </div>
+    </div>
+); /*END App */
 	/******/
 	/*IkFile1.js file*/
 	/******/
@@ -92,7 +96,8 @@ const App = () => {
 ReactDOM.render(<React.StrictMode><App /></React.StrictMode>, document.getElementById('root'));
 
 
-/*1+
+/*1+ if there was no event.stopPropagation() than 'iKclick1' will always trigger whenever you click on any of its nested elements.
+    +\ but now nested element will not bubble up click event and therefore you can create separate click events for nested components too without having to trigger 'iKclick1' too.
 2+
 3+
 4+

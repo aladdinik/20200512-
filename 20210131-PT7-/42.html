@@ -60,11 +60,11 @@
 'use strict';
 
 
-/* */
+/* IK EXPERIMENTING MODALS */
 /*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
 +\ iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
 
-+\ zzzzzzzzzzzzzzz give setState is undefine, so first set that as a variable than see what happens next.
++\ 
 */
 
 	/******/
@@ -99,44 +99,46 @@ const App = () => {
 //import ReactDOM from 'react-dom';
  
 class Modal extends React.Component {
-  state = { open: false };
+    state = { open: false };
  
-  onDismiss() {
-    this.setState({ open: false });
-    this.props.onDismiss();
-  }
- 
-  renderModal() {
-    if (!this.state.open) {
-      return null;
+    onDismiss = () => {
+        this.setState({ open: false });
+        this.props.onDismiss();
     }
  
-    return ReactDOM.createPortal(
-      <div onClick={this.onDismiss} className="ui dimmer modals visible active">
-        <div
-          onClick={e => e.stopPropagation()}
-          className="ui standard modal visible active"
-        >
-          <div className="header">{this.props.title}</div>
-          <div className="content">{this.props.content}</div>
-          <div className="actions">{this.props.actions}</div>
-        </div>
-      </div>,
-      document.querySelector('#modal')
-    );
-  }
+    renderModal = () => {
+        if (!this.state.open) {
+            return null;
+        }
+
+        return ReactDOM.createPortal(
+            <div
+                onClick={this.onDismiss}
+                className="ui dimmer modals visible active">
+                <div
+                    onClick={e => e.stopPropagation()}
+                    className="ui standard modal visible active"
+                >
+                    <div className="header">{this.props.title}</div>
+                    <div className="content">{this.props.content}</div>
+                    <div className="actions">{this.props.actions}</div>
+                </div>
+            </div>,
+        document.querySelector('#modal')
+        );
+    }; /*END renderModal */
  
-  render() {
-    return (
-      <div>
-        <button onClick={() => this.setState({ open: true })}>
-          Open Modal
-        </button>
-        {this.renderModal()}
-      </div>
-    );
-  }
-}
+    render = () => {
+        return (
+            <div>
+                <button onClick={() => this.setState({ open: true })}>
+                    Open Modal
+                </button>
+                {this.renderModal()}
+            </div>
+        );
+    }; /*END render */
+}; /*END class Modal */
  
 //export default Modal;
 
