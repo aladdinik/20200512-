@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains() -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!--    <link href="zIK/02css/aReset.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="zIK/02css/normalize.css" rel="stylesheet" type="text/css">-->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
+    <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
+<!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
+    <title>09 Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains()</title>
+<style>
+/* + + + + + + + + + + + STYLE ---------------------------*/
+/*---------------------- /style //////////////////////////*/
+</style>
+</head>
+<body>
+<main role="main">
+<!-- <noscript> is for users who have javascript turned off. instructions on how to enable javascript. ik you can modify the inline style how you want and beware of top nav bar-->
+    <noscript style="border: red 2px solid; font-weight: bolder; padding-bottom: 4px;">
+     For full functionality of this site it is necessary to enable JavaScript to its normal settings.
+     Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+     instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+<!--+ + + + + + + + + + + MAIN --------------------------->
+
+
+<!-- index.html file (VIP for CRA) -->
+<div id="root"></div>
+
+
+<!---------------------- /main /////////////////////////-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelement-and-player.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js" integrity="sha512-HKvDCFVKg8ZPGjecy6on7UECEpE76Y86h3GaE4JMCz+deFWdjcW/tWnh0hCfaBvURvlOa9f5CNVzt7EFkulYbw==" crossorigin="anonymous"></script>
+<script src="zIK/HS07mockServerEventsource/mockevent.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+<!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
+<script src="zIK/03JS/kiK.js" type="text/javascript"></script>
+<script type="text/babel">
+/* + + + + + + + + + + + SCRIPT --------------------------*/
+'use strict';
+
+
+/*Display toggle component with .addEventListener() , and using cleanup function .removeEventListener() in useEffect() to remove .addEventListener() / useRef() / .contains() */
+/*iK toggle boolean state in IkAddEventListener component. Using react onClick event for true value, and .addEventListener() in useEffect() for false value.
+    +\ therefore you can click on the IkAddEventListener component and outside the IkAddEventListener component too with the use of document.body.addEventListener() .
+        +\ BIM however issues can occur if you remove the IkAddEventListener component because the .addEventListener() event inside the component will still remains active on the webpage.
+            +\ VIP which is why you need to use a cleanup function too just like you would do with a componentWillUnmount() . Otherwise error occurs if no cleanup function.
+            +\ iK so in this demo I included a display settings for unmounting the IkAddEventListener component to demostrate how to use cleanup function (just like componentWillUnmount() ) too.
++\ This cleanup function method can be use for removing .addEventListener() / setTimeout() / setInterval() / etc...
+    +\ basically anything that is still active when component is unmounted.
+    +\ eg. the .addEventListener() component could be a dropdown component which needs click event to open and close its dropdown items, whilst also clicking outside its dropdown component so that the dropdown items can be closed automatically. */
+
+const {useState, useEffect, useRef} = React;
+
+	/******/
+	/*App.js file*/
+	/******/
+const App = () => {
+    const [iKdisplayState, iKdisplaySetState] = useState( true ); /*1+*/
+    const [iKbooleanState, iKbooleanSetState] = useState( true ); /*2+*/
+
+    const iKdisplayAddEventListenerComponent = () => { /*3+*/
+        if ( iKdisplayState ) {
+            return (
+                <IkAddEventListener 
+                    iKbooleanSetState={ iKbooleanSetState }
+                />
+            );
+        }
+        else return null;
+    }; /*END iKdisplayAddEventListenerComponent */
+
+    return (
+        <div>
+            <button
+                onClick={ () => iKdisplaySetState( !iKdisplayState ) } /*4+*/
+            >
+                display Toggle IkAddEventListener component and iKbooleanSetState: false
+            </button>
+
+            { iKdisplayAddEventListenerComponent() /*5+*/ }
+
+            <h1><code>document.body. for iKbooleanSetState: false</code></h1> {/*6+*/}
+
+            <h1>{ `iKbooleanState: ${iKbooleanState}` }</h1>            
+        </div>
+    ); /*END return */
+}; /*END App */
+
+
+	/******/
+	/*IkAddEventListener.js file*/
+	/******/
+const IkAddEventListener = ({ iKbooleanSetState }) => {
+    const iKbuttonRef = useRef(); /*7+*/
+
+    useEffect(() => {
+        const iKeventListenerCallBack = event => { /*8+*/
+            if( iKbuttonRef.current && iKbuttonRef.current.contains( event.target ) ) { /*9+*/ /*+iKUPDATED20201216VIP+*/
+                console.log( iKbuttonRef.current ); /*OP <button>...</button> */
+                console.log( iKbuttonRef.current.contains(event.target) ); /*OP true */
+                return; /*10*/
+            };
+
+            iKbooleanSetState( false ); /*11+*/
+        }; /*END iKeventListenerCallBack */
+
+        document.body.addEventListener( 'click', iKeventListenerCallBack ); /*12+*/
+
+        return () => document.body.removeEventListener( 'click', iKeventListenerCallBack ); /*13+*/
+    }, [] ) /*END useEffect() */ /*14+*/
+
+    return (
+        <div>
+            <button
+                ref={ iKbuttonRef } /*15+*/
+                onClick={ () => iKbooleanSetState( true ) } /*16+*/
+            >
+                IkAddEventListener for iKbooleanSetState: true
+            </button>
+        </div>
+    ); /*END return */
+}; /*END IkAddEventListener */
+
+
+	/******/
+	/*index.js file*/
+	/******/
+ReactDOM.render(<App />, document.getElementById('root'));
+
+/*1+ to display the IkAddEventListener component or not.
+2+ boolean for IkAddEventListener component to toggle with using its event listener.
+3+ determines if IkAddEventListener component is shown or not using iKdisplayState boolean value.
+4+ toggle button for iKdisplayState boolean value.
+5+ display IkAddEventListener component or not.
+6+ iK this is non-essential, it is to just to give more space on the web page to click on that is part of document.body.addEventListener() .
+7+ useRef() works similarly as createRef() . 
+8+ creating a function callback is easier to insert both .addEventListener() and .removeEventListener() .
+9+ true if event.target is also iKbuttonRef or any of its descendants.
+9+ You could have also use iKbuttonRef as the parent element (event delegation).
++iKUPDATED20201216VIP+ 'iKbuttonRef.current &&' - I have included this code in because reactV17 (or later) requires it otherwise you will get error message on console.
+    +\ iK? and it turns out you no longer need 'iKbuttonRef.current.contains( event.target )' in the conditional statement as it works without it, 'iKbuttonRef.current' is good enough to do the job.
+10+ so if clicking on the iKbuttonRef element, than return nothing, as there is nothing we want to do here.
+11+ if clicking is not iKbuttonRef element than change iKbooleanState to false.
+    +\ basically you will now be clicking every other element that is not iKbuttonRef element, which is where document.body. comes in.
+12+ event listener is on document.body. , and will not work on iKbuttonRef element.
+13+ VIP if IkAddEventListener component is removed (eg. via iKdisplayState in this demo) than ensure you have a cleanup function in place as the .addEventListener() will still be active despite its component being removed, otherwise error could occur.
+    +\ BIM the cleanup function works exactly like componentWillUnmount() .
+    +\ ensure the .removeEventListener() is wrapped in a annoymouns function for the cleanup function like in this demo.
+14+ you only need to insert the .addEventListener() on the first render. But could be different for other events such as setTimeout() .
+15+ alternatively you could have used ref on the parent div as event delegation.
+16+ react click event which works normally when you select the iKbuttonRef element. */
+
+
+ /*OP */
+/* **** d */
+/*--------------------- /script /////////////////////////*/ /* 
+	IK.printD( html );
+	IK.everyStyles( DOMelement );
+	IK.ascii("a", "b");
+	IK.patternIndexNumber( iKarray, searchThisValue );
+	IK.cssSupport("cssProperty", "cssValue");
+	IK.listAttributes( DOMnode );
+	IK.serialize( formDOMelement );
+	IK.serializeObject( iKobject );
+	IK.cloneObject( iKobject );
+	IK.fetchJson( apiUrlP );
+
+const iKvar1 = "iKV1";
+const iKarray1 = ["iKaV1", "iKaV2", "iKaV3"];
+const iKobject1 = {iKoProperty1: "iKoV1", iKoProperty2: "iKoV2", iKoProperty3: "iKoV3"};
+const iKmap1 = new Map([ ["iKmapProp1", "iKmapV1"], ["iKmapProp2", "iKmapV2"], ["iKmapProp3", "iKmapV3"] ]);
+const iKset1 = new Set([ "iKsetV1", "iKsetV2", "iKsetV3" ]);
+const iKconsFunction1 = function ( {iKpar1, iKpar2, iKpar3} = {} ) {
+	this.iKconsFuncProp1 = iKpar1 || "iKdefaultPar1";
+	this.iKconsFuncProp2 = iKpar2 || "iKdefaultPar2";
+	this.iKconsFuncProp3 = iKpar3 || "iKdefaultPar3";
+};
+	const iKconsObject1 = new iKconsFunction1();
+const iKasyncFunction1 = async () => {
+	try {
+		const iKpromise1 = await new Promise(function(resolve, reject) {
+		});
+		return iKpromise1;
+	} catch(iKcatchError1) {
+		throw new Error("iKerror >>> ", iKcatchError1);
+	};
+};
+	iKasyncFunction1();	*/
+</script>
+</main>
+</body>
+</html>

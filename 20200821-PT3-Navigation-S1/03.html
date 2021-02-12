@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Create navbar with anchor link elements / update and sync react component to match url window.location.pathname without refreshing the page / ability to open new tab by clicking control key / window.history.pushState() / popstate event / event.ctrlKey / event.metaKey -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!--    <link href="zIK/02css/aReset.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="zIK/02css/normalize.css" rel="stylesheet" type="text/css">-->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
+    <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
+<!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
+    <title>03 Create navbar with anchor link elements / update and sync react component to match url window.location.pathname without refreshing the page / ability to open new tab by clicking control key / window.history.pushState() / popstate event / event.ctrlKey / event.metaKey</title>
+<style>
+/* + + + + + + + + + + + STYLE ---------------------------*/
+/*---------------------- /style //////////////////////////*/
+</style>
+</head>
+<body>
+<main role="main">
+<!-- <noscript> is for users who have javascript turned off. instructions on how to enable javascript. ik you can modify the inline style how you want and beware of top nav bar-->
+    <noscript style="border: red 2px solid; font-weight: bolder; padding-bottom: 4px;">
+     For full functionality of this site it is necessary to enable JavaScript to its normal settings.
+     Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+     instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+<!--+ + + + + + + + + + + MAIN --------------------------->
+
+
+<!-- index.html file (VIP for CRA) -->
+<div id="root"></div>
+
+
+<!---------------------- /main /////////////////////////-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelement-and-player.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js" integrity="sha512-HKvDCFVKg8ZPGjecy6on7UECEpE76Y86h3GaE4JMCz+deFWdjcW/tWnh0hCfaBvURvlOa9f5CNVzt7EFkulYbw==" crossorigin="anonymous"></script>
+<script src="zIK/HS07mockServerEventsource/mockevent.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+<!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
+<script src="zIK/03JS/kiK.js" type="text/javascript"></script>
+<script type="text/babel">
+/* + + + + + + + + + + + SCRIPT --------------------------*/
+'use strict';
+
+
+/*Create navbar with anchor link elements / update and sync react component to match url window.location.pathname without refreshing the page / ability to open new tab by clicking control key / window.history.pushState() / popstate event / event.ctrlKey / event.metaKey */
+/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
++\ iKdemo will show three links on page, and at the bottom will show the component you are currently on, which should always be in sync with the url (in address bar).
+    +\ under the hood React-router would work almost exactly the same way as the iKdemo, but we are showing the purest javascript react navigation as possible here.
+    +\ iK remember you are on file /03.html so you will see this place on the pathname string in this demo, otherwise normally it would not be there.
++\ key things in the iKdemo: prevent page refresh so that we do not have to reload assets files again / update the url pathname (address bar) to keep in sync with the component currently shown / created a popstate event and dispatched it (when you click on a anchor link) so that all the react component will detect the url (address bar) has changed and render the correct component.
+    +\ iK an extra addition but not vital for the iKdemo, user can also press control key + click on a anchor link to open a new tab for it.
+    +\ iK? however I suspect this method loads every react components (even the ones that are not displaying on the current url) and files in the fold page, so therefore the intial load could possibly take a while, but once it is loaded, than there will be nothing else to load, so clicking onto a different component page link appears instant to the user.
++\ iK on stephen grider video there appeared to be a minor error on the console saying a possible memory leak despite everything working accordingly. You should be aware of it despite it not showing up in this iKdemo. However the error occured on his search component, so you might have nothing to do with it either. 
++\ App.js / IkNavHeader1.js / IkLink1.js / IkRoute1.js / IkHome1.js / IkPathname1.js / IkPathname2.js / index.js */
+
+	/******/
+	/*App.js file*/
+	/******/
+//    import React from 'react';
+
+//    import IkNavHeader1 from './IkNavHeader1.js';
+//    import IkRoute1 from './IkRoute1.js';
+//    import IkHome1 from './IkHome1.js';
+//    import IkPathname1 from './IkPathname1.js';
+//    import IkPathname2 from './IkPathname2.js';
+
+const App = () => ( /*1+*/
+    <div>
+        <IkNavHeader1 />
+
+        <IkRoute1 iKpath='/03.html' >
+            <IkHome1 />
+        </IkRoute1>
+
+        <IkRoute1 iKpath='/03.html/ikPathname1' > 
+            <IkPathname1 />
+        </IkRoute1>
+
+        <IkRoute1 iKpath='/03.html/ikPathname2' > 
+            <IkPathname2 />
+        </IkRoute1>
+    </div>
+); /*END App */
+
+//    export default App;
+
+
+	/******/
+	/*IkNavHeader1.js file*/
+	/******/
+//    import React from 'react';
+
+//    import IkLink1 from './IkLink1.js';
+
+const IkNavHeader1 = () => ( /*2+*/
+    <nav>
+        <IkLink1 iKhref='/03.html'>
+            IkHome1 page link
+        </IkLink1> <br/>
+
+        <IkLink1 iKhref='/03.html/ikPathname1' >
+            IkPathname1 page link
+        </IkLink1> <br/>
+
+        <IkLink1 iKhref='/03.html/ikPathname2' >
+            IkPathname2 page link
+        </IkLink1>
+    </nav>
+); /*END IkNavHeader1 */
+
+//    export default IkNavHeader1;
+
+
+	/******/
+	/*IkLink1.js file*/
+	/******/
+//    import React from 'react';
+
+const IkLink1 = ({ iKhref, children }) => {
+    const iKonAnchorClick = event => {
+        if (event.ctrlKey || event.metaKey) { /*3+*/
+            return; /*4+*/
+        };
+
+        event.preventDefault(); /*5+*/
+
+        window.history.pushState({}, '', iKhref); /*6+*/
+
+        const iKpopStateEvent = new PopStateEvent( 'popstate' ); /*7+*/
+
+        window.dispatchEvent( iKpopStateEvent ); /*8+*/
+    }; /*END iKonAnchorClick */
+
+    return (
+        <a  href={ iKhref }
+            onClick={ iKonAnchorClick }
+        >{ children }</a>
+    ); /*END return */
+}; /*END IkLink1 */
+
+//    export default IkLink1;
+
+
+	/******/
+	/*IkRoute1.js file*/
+	/******/
+//    import {useEffect, useState} from 'react';
+const {useEffect, useState} = React;
+
+const IkRoute1 = ({ iKpath, children }) => {
+    const [iKcurrentUrlPathnameState, iKcurrentUrlPathnameSetState] = useState( window.location.pathname );
+
+    useEffect(() => {
+        const iKurlPathNameChanged = event => { /*9+*/
+            iKcurrentUrlPathnameSetState( window.location.pathname );
+            console.log( event ); /*OP: PopStateEvent object */
+        };
+
+        window.addEventListener( 'popstate', iKurlPathNameChanged ); /*10+*/
+
+        return () => window.removeEventListener( 'popstate', iKurlPathNameChanged ); /*11+*/
+    }, []); /*END useEffect */
+
+    return iKcurrentUrlPathnameState === iKpath
+        ? children
+        : null;
+}; /*END IkRoute1 */
+
+//    export default IkRoute1;
+
+
+	/******/
+	/*IkHome1.js file*/
+	/******/
+//    import React from 'react';
+
+const IkHome1 = () => (
+    <div>iK currently on: IkHome1</div>
+); /*END IkHome1 */
+
+//    export default IkHome1;
+
+
+	/******/
+	/*IkPathname1.js file*/
+	/******/
+//    import React from 'react';
+
+const IkPathname1 = () => (
+    <div>iK currently on: IkPathname1</div>
+); /*END IkPathname1 */
+
+//    export default IkPathname1;
+
+
+	/******/
+	/*IkPathname2.js file*/
+	/******/
+//    import React from 'react';
+
+const IkPathname2 = () => (
+    <div>iK currently on: IkPathname2</div>
+); /*END IkPathname2 */
+
+//    export default IkPathname2;
+
+
+	/******/
+	/*index.js file*/
+	/******/
+//	import React from 'react';
+//	import ReactDOM from 'react-dom';
+//	import App from './App';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+
+/*1+ <IkNavHeader1 /> contains three anchor links to the component pages.
+2+ iK it was not necessary to use <IkLink1/> component as I could have done it all here within this component, but wanted to show the similarity between react router <Link/> .
+3+ allows you to press control key + click to open new tab.
+    +\ BIM event.ctrlKey is Window keyboard and event.metaKey is Apple keyboard.
+    +\ iK bizarly the pathname components  does not work with html project. But it works fine on cra .
+4+ we return early because the user is heading to a new tab page, therefore it will need to load every asset files again.
+    +\ It would not be good to prevent page refresh on a new tab and etc.. 
+5+ prevents page refresh.
+6+ this allows you to overwrite and update the url in the browser address bar.
+    +\ combine with event.preventDefault() , it will appear instant in the address bar without refreshing page.
+7+ created a popstate object event which would detect window.history url changing.
+8+ use .dispatchEvent() for executing the iKpopStateEvent object to be live on window document.
+    +\ so now iKpopStateEvent is live,it will send out a popstate event object to window everytime window.history changes.
+        +\ the object data will also include the updated data about window.location.pathname which you need for this iKdemo.
+9+ for updating state when popstate event (updated window.history ) is detected with the new and updated window.location.pathname .
+10+ when user clicks on anchor links, it will detect your create popstate object event.
+    +\ including the updated url address bar (using the window.history.pushState() ).
+11+ remove event listener for non matching url components . */
+
+
+ /*OP */
+/* **** d */
+/*--------------------- /script /////////////////////////*/ /* 
+	IK.printD( html );
+	IK.everyStyles( DOMelement );
+	IK.ascii("a", "b");
+	IK.patternIndexNumber( iKarray, searchThisValue );
+	IK.cssSupport("cssProperty", "cssValue");
+	IK.listAttributes( DOMnode );
+	IK.serialize( formDOMelement );
+	IK.serializeObject( iKobject );
+	IK.cloneObject( iKobject );
+	IK.fetchJson( apiUrlP );
+
+const iKvar1 = "iKV1";
+const iKarray1 = ["iKaV1", "iKaV2", "iKaV3"];
+const iKobject1 = {iKoProperty1: "iKoV1", iKoProperty2: "iKoV2", iKoProperty3: "iKoV3"};
+const iKmap1 = new Map([ ["iKmapProp1", "iKmapV1"], ["iKmapProp2", "iKmapV2"], ["iKmapProp3", "iKmapV3"] ]);
+const iKset1 = new Set([ "iKsetV1", "iKsetV2", "iKsetV3" ]);
+const iKconsFunction1 = function ( {iKpar1, iKpar2, iKpar3} = {} ) {
+	this.iKconsFuncProp1 = iKpar1 || "iKdefaultPar1";
+	this.iKconsFuncProp2 = iKpar2 || "iKdefaultPar2";
+	this.iKconsFuncProp3 = iKpar3 || "iKdefaultPar3";
+};
+	const iKconsObject1 = new iKconsFunction1();
+const iKasyncFunction1 = async () => {
+	try {
+		const iKpromise1 = await new Promise(function(resolve, reject) {
+		});
+		return iKpromise1;
+	} catch(iKcatchError1) {
+		throw new Error("iKerror >>> ", iKcatchError1);
+	};
+};
+	iKasyncFunction1();	*/
+</script>
+</main>
+</body>
+</html>

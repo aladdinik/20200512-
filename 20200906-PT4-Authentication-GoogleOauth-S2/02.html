@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- 02 Handling Authentication with Google oAuth browser library / Google sign-in -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!--    <link href="zIK/02css/aReset.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="zIK/02css/normalize.css" rel="stylesheet" type="text/css">-->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
+    <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
+<!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
+    <title>02 Handling Authentication with Google oAuth browser library / Google sign-in</title>
+<style>
+/* + + + + + + + + + + + STYLE ---------------------------*/
+/*---------------------- /style //////////////////////////*/
+</style>
+</head>
+<body>
+<main role="main">
+<!-- <noscript> is for users who have javascript turned off. instructions on how to enable javascript. ik you can modify the inline style how you want and beware of top nav bar-->
+    <noscript style="border: red 2px solid; font-weight: bolder; padding-bottom: 4px;">
+     For full functionality of this site it is necessary to enable JavaScript to its normal settings.
+     Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+     instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+<!--+ + + + + + + + + + + MAIN --------------------------->
+
+
+<!-- index.html file (VIP for CRA) -->
+<div id="root"></div>
+
+
+<!---------------------- /main /////////////////////////-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelement-and-player.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js" integrity="sha512-wBiNJt1JXeA/ra9F8K2jyO4Bnxr0dRPsy7JaMqSlxqTjUGHe1Z+Fm5HMjCWqkIYvp/oCbdJEivZ5pLvAtK0csQ==" crossorigin="anonymous"></script><script src="zIK/HS07mockServerEventsource/mockevent.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.2/react-redux.min.js" integrity="sha512-XTD4hwwD/OaJj0jZP9+rdrrirXfDkFaBoZB16n9hP4wuXifvlI4YNtSucUZ4cF4uX6eH30LPFXTyqAGqyfhI6Q==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+<!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
+    
+    <script src="https://apis.google.com/js/api.js"></script>       <!-- 1+ -->
+
+<script src="zIK/03JS/kiK.js" type="text/javascript"></script>
+<script type="text/babel">
+/* + + + + + + + + + + + SCRIPT --------------------------*/
+'use strict';
+
+
+/* Handling Authentication with Google oAuth browser library / Google sign-in */
+/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
+    +\ iK however Google sign-in will not work in this html project demo because you need to use a localhost server to work. You can use the spa version if you still got it or you can copy & paste it onto a SPA to test it out and the localhost server should work fine.
+        +\ but it will only work if you still have the '210105-GSignInOauthTESTING' google console project.
++\ This demo uses a sign in button to log on and off to Google account, whilst user remains on your web page.
+    +\ It thans confirms if user is signed in or not with google by outputing boolean value onto console.log() and sign in button changes text too.
++\ You first need to set up a google account project console with oAuth consent screen and credentials. Also you will need to include url's restriction for it to work on.
+    +\ when done creating the project you will get a unique google clientId and client secret which is similar to a api key.
+        +\ iK however you will only need the clientId for oAuth js browser, because client secret is for oAuth servers. */
+
+	/******/
+	/*App.js file*/
+	/******/
+const App = () => {
+    return (
+        <div>
+            <IkGoogleOAuthComponent />
+        </div>
+    );
+}; /*END App */
+
+	/******/
+	/*IkGoogleOAuthComponent.js file*/
+	/******/
+const {useState, useEffect} = React;
+
+const IkGoogleOAuthComponent = props => {
+    const [iKauth2objectState, iKauth2objectSetState] = useState(null);
+    const [iKisLoggedInState, iKisLoggedInSetState] = useState(null);
+
+    useEffect(() => {
+        const iKgapi = window.gapi; /*2+*/
+
+        /*load google client and auth2 library*/
+        iKgapi.load('client:auth2', () => { /*3+*/
+            /*confirm your google account project console */
+            iKgapi.client.init({    /*4+*/
+                clientId: "478722968109-4tnv95algrocvbc2ktbo9bai1iskpn5u.apps.googleusercontent.com", /*5+*/
+                scope: "email"      /*6+*/
+            })
+                /*state store the auth2 object and keep track of the google sign in status */
+                .then(() => {   /*7+*/
+                    const iKauth2Instance = iKgapi.auth2.getAuthInstance(); /*8+*/
+                    iKauth2objectSetState( iKauth2Instance );
+                    iKisLoggedInSetState( iKauth2Instance.isSignedIn.get() ); /*9+*/
+                    iKauth2Instance.isSignedIn.listen( iKbooleanP => iKsignInStatusChanges(iKbooleanP) ); /*10+*/
+                    console.log( iKauth2Instance.isSignedIn.get() ); /*OP boolean value*/
+                })
+        }); /*END .load() */
+    }, []); /*END useEffect() */
+
+    /*if google sign in status changes, track it on the iKikLoggedInState too */
+    const iKsignInStatusChanges = iKbooleanP => {
+        switch (iKbooleanP) {
+            case true:  /*11+*/
+                iKisLoggedInSetState( true );
+                break;
+            case false:
+                iKisLoggedInSetState( false );
+                break;
+            default:
+                return;
+        };
+    }; /*END iKsignInStatusChanges */
+
+    /*click sign in or sign out of google account using the iKauth2objectState state */
+    const iKonSignInClick = () => {
+        /*sign in to google account*/
+        if (iKauth2objectState.isSignedIn.get() === false) { /*12+*/
+            console.log(iKauth2objectState.isSignedIn.get()); /*OP boolean value*/
+            iKauth2objectState.signIn().catch(() => console.warn('iK user closed popup screen')); /*13+*/
+            setTimeout(     /*14*/
+                () => console.log(iKauth2objectState.isSignedIn.get()), /*OP boolean value*/
+                4000
+            );
+        }
+        /*sign out to google account*/
+        else if (iKauth2objectState.isSignedIn.get() === true) {
+            console.log(iKauth2objectState.isSignedIn.get()); /*OP boolean value*/
+            iKauth2objectState.signOut();
+            setTimeout(     /*14+*/
+                () => console.log(iKauth2objectState.isSignedIn.get()), /*OP boolean value*/
+                4000
+            );
+        }
+    }; /*END iKonSignInClick */
+
+    /*the google sign-in jsx button text*/ /*15+*/
+    const iKsignedInButton = () => {
+        if (iKisLoggedInState === null) {
+            return 'iK the fold page';
+        }
+        else if (iKisLoggedInState === true) {
+            return 'iK currently signed in';
+        }
+        else if (iKisLoggedInState === false) {
+            return 'iK currently signed out';
+        };
+    }; /*END iKsignedInButton */
+
+    return (
+        <div>
+            <button
+                onClick={iKonSignInClick}
+            >{iKsignedInButton()}</button>
+        </div>
+    ); /*END return */
+}; /*END IkGoogleOAuthComponent component */
+
+
+
+	/******/
+	/*index.js file*/
+	/******/
+//	import React from 'react';
+//	import ReactDOM from 'react-dom';
+//	import App from './App';
+
+ReactDOM.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+    document.getElementById('root')
+); /*END ReactDOM.render() */
+
+
+/*1+ Google oAuth library for js browser.
+    +\ got it Stephen Grider and google, however there was one more script that they showed on google, but this scripts works fine.
+    +\ this will load the google .load() function which you can load any particular library you need from google.
+2+ use window when first loading on react as it might not recognise gapi on its own.
+3+ I am loading two library, client and auth2 .
+4+ client.init() is to verify your google account project console you have had set up first.
+5+ got from you google account project console credentials
+6+ choose which scope you want to use from google scope api's.
+7+ after client has been verified, you will be able to freely access the auth2 object.
+8+ you must first create a auth2 instance.
+    +\ you can use .getAuthInstance() as many times as you want because it will not change and still be the same after page refreshes too.
+9+ confirms if user is currently signed in with a boolean value.
+10+ .listen() is like an event listener and returns a boolean value when it detects a change in the sign in status.
+11+ true means the user is signed out.
+12+ false means the user is signed out.
+13+ a popup screen asking to sign in with google will occur when you use the .signIn() method.
+    +\ .catch() is not necessary but you can do something if the user closes the google sign in popup screen.
+14+ iK I only use setTimeout() to give the user/asynchronous time to sign in or out and therefore we can get an accurate google sign in status.
+15+ iK I could instead outputted the actual jsx button, but I went with text for this demo.
+    +\ also you could have use actual google icons and colour.
+        +\ easier to get these from css libraries such as semantic-ui or bootstrap. */
+
+
+ /*OP */
+/* **** d */
+/*--------------------- /script /////////////////////////*/ /* 
+	IK.printD( html );
+	IK.everyStyles( DOMelement );
+	IK.ascii("a", "b");
+	IK.patternIndexNumber( iKarray, searchThisValue );
+	IK.cssSupport("cssProperty", "cssValue");
+	IK.listAttributes( DOMnode );
+	IK.serialize( formDOMelement );
+	IK.serializeObject( iKobject );
+	IK.cloneObject( iKobject );
+	IK.fetchJson( apiUrlP );
+
+const iKvar1 = "iKV1";
+const iKarray1 = ["iKaV1", "iKaV2", "iKaV3"];
+const iKobject1 = {iKoProperty1: "iKoV1", iKoProperty2: "iKoV2", iKoProperty3: "iKoV3"};
+const iKmap1 = new Map([ ["iKmapProp1", "iKmapV1"], ["iKmapProp2", "iKmapV2"], ["iKmapProp3", "iKmapV3"] ]);
+const iKset1 = new Set([ "iKsetV1", "iKsetV2", "iKsetV3" ]);
+const iKconsFunction1 = function ( {iKpar1, iKpar2, iKpar3} = {} ) {
+	this.iKconsFuncProp1 = iKpar1 || "iKdefaultPar1";
+	this.iKconsFuncProp2 = iKpar2 || "iKdefaultPar2";
+	this.iKconsFuncProp3 = iKpar3 || "iKdefaultPar3";
+};
+	const iKconsObject1 = new iKconsFunction1();
+const iKasyncFunction1 = async () => {
+	try {
+		const iKpromise1 = await new Promise(function(resolve, reject) {
+		});
+		return iKpromise1;
+	} catch(iKcatchError1) {
+		throw new Error("iKerror >>> ", iKcatchError1);
+	};
+};
+	iKasyncFunction1();	*/
+</script>
+</main>
+</body>
+</html>

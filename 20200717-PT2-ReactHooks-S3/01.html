@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Accordion component using react hook / useState() / useEffect() -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!--    <link href="zIK/02css/aReset.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="zIK/02css/normalize.css" rel="stylesheet" type="text/css">-->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
+    <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
+<!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
+    <title>01 Accordion component using react hook / useState() / useEffect()</title>
+<style>
+/* + + + + + + + + + + + STYLE ---------------------------*/
+/*---------------------- /style //////////////////////////*/
+</style>
+</head>
+<body>
+<main role="main">
+<!-- <noscript> is for users who have javascript turned off. instructions on how to enable javascript. ik you can modify the inline style how you want and beware of top nav bar-->
+    <noscript style="border: red 2px solid; font-weight: bolder; padding-bottom: 4px;">
+     For full functionality of this site it is necessary to enable JavaScript to its normal settings.
+     Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+     instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+<!--+ + + + + + + + + + + MAIN --------------------------->
+
+
+<!-- index.html file (VIP for CRA) -->
+<div id="root"></div>
+
+
+<!---------------------- /main /////////////////////////-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelement-and-player.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js" integrity="sha512-HKvDCFVKg8ZPGjecy6on7UECEpE76Y86h3GaE4JMCz+deFWdjcW/tWnh0hCfaBvURvlOa9f5CNVzt7EFkulYbw==" crossorigin="anonymous"></script>
+<script src="zIK/HS07mockServerEventsource/mockevent.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+<!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
+<script src="zIK/03JS/kiK.js" type="text/javascript"></script>
+<script type="text/babel">
+/* + + + + + + + + + + + SCRIPT --------------------------*/
+'use strict';
+
+
+/*Accordion component using react hook / useState() / useEffect() */
+/*iK it was done using CRA, so you will see what it was like to be written in CRA with several files, and the import and export will be commented out here.
++\ the accordion is simple, click on title to show content, and click again on title or other title to close that content.
+    +\ iK the close click will not work outside the component such as the document.body, but I could have done something like that using document.body.addEventListener() .
+    +\ iK alternatively I could have instead use toggle class names to show the content element instead of using jsx element but I showed a different method here.
+        +\ I could also have used a 3rd library such as semantic-ui react where they already did the accordion coding and you just need to toggle the class name to show and unshow the content.
+            +\ iK normally you should consider doing it with 3rd library as they save you so much time and it is simple to use too, but I just wanted to show the react way. */
+
+	/******/
+	/*App.js file*/
+	/******/
+//    import React, {useState} from 'react';
+//    import IkAccordion from './IkAccordion.js';
+
+const iKBikeArrayObject = [ /*1+*/
+    {
+        title: "Road bike",
+        content: "Road bike are design to go fast on tarmac road."
+    },
+    {
+        title: "Mountain bike",
+        content: "Mountain bike are design to take on the toughest terrain for the adventurous souls."
+    },
+    {
+        title: "Gravel bike",
+        content: "Gravel bikes are like road bike but with the capabilities of going off-road."
+    },
+    {
+        title: "E-bike",
+        content: "E-bike are design for people who want a more relaxing and speedy journey."
+    }
+]; /*END iKBikeArrayObject */
+
+
+const {useState} = React;
+
+const App = props => {
+    const [iKselectedIndexState, iKselectedIndexSetState] = useState( null ); /*2+*/
+
+    const iKaccordionLoop = iKBikeArrayObject.map( (iKobjectP, iKindexP) => {
+        return (
+            <IkAccordion
+                key={ iKobjectP.title }
+                iKtitle={ iKobjectP.title }
+                iKcontent={ iKobjectP.content }
+                iKindex={ iKindexP }
+                iKselectedIndexState={ iKselectedIndexState }
+                iKselectedIndexSetState={ iKselectedIndexSetState }
+            />
+        );
+    }); /*END iKaccordionLoop */
+
+    return (
+        <div>
+            <h1>accordion component list</h1>
+            { iKaccordionLoop }
+        </div>
+    ); /*END return */
+}; /*END App component */
+
+//    export default App;
+
+
+	/******/
+	/*IkAccordion.js file*/
+	/******/
+//    import React, {useState, useEffect} from 'react';
+
+const {useEffect} = React;
+
+const IkAccordion = ({iKtitle, iKcontent, iKindex, iKselectedIndexState, iKselectedIndexSetState}) => {
+    const [iKshowAccordionState, iKshowAccordionSetState] = useState( false ); /*3+*/
+
+
+    useEffect(
+        () => {
+            if (iKindex === iKselectedIndexState) { /*4+*/
+                iKshowAccordionSetState( true );
+            }
+            else if (iKindex !== iKselectedIndexState) {
+                iKshowAccordionSetState( false );
+            };
+        },
+        [iKindex, iKselectedIndexState] /*5+*/
+    ); /*END useEffect */
+
+
+    const iKclickCurrentIndex = () => {
+        if (iKshowAccordionState) { /*6+*/
+            iKselectedIndexSetState( null );
+        }
+        else if (!iKshowAccordionState) {
+            iKselectedIndexSetState( iKindex );
+        }
+    }; /*END iKclickCurrentIndex */
+
+
+    return (
+        <div>
+            <h2 onClick={ iKclickCurrentIndex } >{ iKtitle }</h2>
+            { iKshowAccordionState ? <p>{iKcontent}</p> : null }
+        </div>
+    ); /*END return */
+}; /*END IkAccordion */
+
+//    export default IkAccordion;
+
+
+	/******/
+	/*index.js file*/
+	/******/
+//	import React from 'react';
+//	import ReactDOM from 'react-dom';
+//	import App from './App';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+/*1+ can be any data (including ajax data) you want to pass down to the accordion component.
+2+ useState() is the same as using class state.
+    +\ iKselectedIndexState is the state property name.
+    +\ iKselectedIndexSetState is the setState() method for iKselectedIndexState property.
+    +\ useState( null ) is the default value for the iKselectedIndexState property.
+2+ I could have use this useState() within the IkAccordion.js file instead since I am passing it as props, but I thought i leave it here
+3+ boolean value to specify if accordion content is currently being shown.
+4+ to determine if the user click is matching this specific accordion <h2> element title.
+5+ rerender IkAccordion component when iKindex or iKselectedIndexState is updated.
+6+ to determine if this specific accordion content is already open, and therefore close content when the user clicks again on the same <h2> element title. */
+
+
+ /*OP */
+/* **** d */
+/*--------------------- /script /////////////////////////*/ /* 
+	IK.printD( html );
+	IK.everyStyles( DOMelement );
+	IK.ascii("a", "b");
+	IK.patternIndexNumber( iKarray, searchThisValue );
+	IK.cssSupport("cssProperty", "cssValue");
+	IK.listAttributes( DOMnode );
+	IK.serialize( formDOMelement );
+	IK.serializeObject( iKobject );
+	IK.cloneObject( iKobject );
+	IK.fetchJson( apiUrlP );
+
+const iKvar1 = "iKV1";
+const iKarray1 = ["iKaV1", "iKaV2", "iKaV3"];
+const iKobject1 = {iKoProperty1: "iKoV1", iKoProperty2: "iKoV2", iKoProperty3: "iKoV3"};
+const iKmap1 = new Map([ ["iKmapProp1", "iKmapV1"], ["iKmapProp2", "iKmapV2"], ["iKmapProp3", "iKmapV3"] ]);
+const iKset1 = new Set([ "iKsetV1", "iKsetV2", "iKsetV3" ]);
+const iKconsFunction1 = function ( {iKpar1, iKpar2, iKpar3} = {} ) {
+	this.iKconsFuncProp1 = iKpar1 || "iKdefaultPar1";
+	this.iKconsFuncProp2 = iKpar2 || "iKdefaultPar2";
+	this.iKconsFuncProp3 = iKpar3 || "iKdefaultPar3";
+};
+	const iKconsObject1 = new iKconsFunction1();
+const iKasyncFunction1 = async () => {
+	try {
+		const iKpromise1 = await new Promise(function(resolve, reject) {
+		});
+		return iKpromise1;
+	} catch(iKcatchError1) {
+		throw new Error("iKerror >>> ", iKcatchError1);
+	};
+};
+	iKasyncFunction1();	*/
+</script>
+</main>
+</body>
+</html>

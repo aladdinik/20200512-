@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Simple use of Redux-Thunk / applyMiddleware() / mapDispatchToProps / Using asynchronous (GET request) code with redux to create random username -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!--    <link href="zIK/02css/aReset.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="zIK/02css/normalize.css" rel="stylesheet" type="text/css">-->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
+    <link href="zIK/02css/oikGrid.css" rel="stylesheet" type="text/css">
+<!--    <link href="zIK/02css/oikFlex.css" rel="stylesheet" type="text/css">-->
+    <title>04 Simple use of Redux-Thunk / applyMiddleware() / mapDispatchToProps / Using asynchronous (GET request) code with redux to create random username</title>
+<style>
+/* + + + + + + + + + + + STYLE ---------------------------*/
+/*---------------------- /style //////////////////////////*/
+</style>
+</head>
+<body>
+<main role="main">
+<!-- <noscript> is for users who have javascript turned off. instructions on how to enable javascript. ik you can modify the inline style how you want and beware of top nav bar-->
+    <noscript style="border: red 2px solid; font-weight: bolder; padding-bottom: 4px;">
+     For full functionality of this site it is necessary to enable JavaScript to its normal settings.
+     Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+     instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+<!--+ + + + + + + + + + + MAIN --------------------------->
+
+
+<!-- index.html file (VIP for CRA) -->
+<div id="root"></div>
+
+
+<!---------------------- /main /////////////////////////-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelement-and-player.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+<script src="zIK/HS07mockServerEventsource/mockevent.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha256-7nQo8jg3+LLQfXy/aqP5D6XtqDQRODTO18xBdHhQow4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.0/react-redux.min.js" integrity="sha256-JuJho1zqwIX4ytqII+qIgEoCrGDVSaM3+Ul7AtHv2zY=" crossorigin="anonymous"></script>
+
+
+<!--1+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.min.js" integrity="sha256-2xw5MpPcdu82/nmW2XQ6Ise9hKxziLWV2GupkS9knuw=" crossorigin="anonymous"></script>
+
+
+<!--<script src="./node_modules/sinon/pkg/sinon.js"></script>-->
+<script src="zIK/03JS/kiK.js" type="text/javascript"></script>
+<script type="text/babel">
+/* + + + + + + + + + + + SCRIPT --------------------------*/
+'use strict';
+
+
+/*Simple use of Redux-Thunk / applyMiddleware() / mapDispatchToProps / Using asynchronous (GET request) code with redux to create random username */
+/*iK Using html project files in the demo. But in SPA remember to npm, import and export accordingly.
++\ In this demo I GET request random username, store it into redux store, and then display it on the page.
++\ Redux-Thunk is mainly for using asynchronous codes with redux.
+	+\ Because redux does not handle asynchronous codes accordingly. Mainly because of babel conversion library. */
+
+	/******/
+	/*iKactionCreators1.js file*/
+	/******/
+const iKactionCreator1 = () => {
+	return async (iKdispatchP, iKgetStateP) => { /*2+*/
+		const iKgetResponse1 = await axios.get("https://randomuser.me/api");
+
+		return iKdispatchP({ /*3+*/
+			type: "GET_USERNAME",
+			payload: iKgetResponse1
+		});
+	};
+}; /*END iKactionCreator1 */
+
+
+	/******/
+	/*iKreducers1.js file*/
+	/******/
+const iKreducer1 = (iKinitialStateP = null, iKactionP) => {
+	switch (iKactionP.type) {
+		case "GET_USERNAME":
+			return iKactionP.payload;
+		default:
+			return iKinitialStateP;
+	};
+}; /*END iKreducer1 */
+
+
+	/******/
+	/*App.js file*/
+	/******/
+const App = () => (
+	<div>
+		<KgetRequestUserNameConnect1 />
+	</div>
+); /*END App */
+
+
+	/******/
+	/*KgetRequestUserNameConnect1.js file*/
+	/******/
+const {connect} = ReactRedux;
+
+class KgetRequestUserNameComponent1 extends React.Component {
+	componentDidMount() {
+		this.props.iKDispatchActionCreator1(); /*4+*/
+	};
+
+	render() {
+		console.log(this.props); /*5+*/
+
+		if (this.props.iKstoreStateProps === null) { /*6+*/
+			return <p>iK loading...</p>;
+		};
+
+		return (
+			<h1>{this.props.iKstoreStateProps.data.results[0].login.username}</h1>
+		); /*OP You get a random username from the api */
+	};
+}; /*END KgetRequestUserNameComponent1 */
+
+const mapStateToProps1 = iKstate => ({
+	iKstoreStateProps: iKstate
+});
+
+const mapDispatchToProps1 = (iKdispatch, iKownProps) => { /*7+*/
+	return {
+		iKDispatchActionCreator1: () => iKdispatch( iKactionCreator1() ), /*8+*/
+		iKownProps
+	};
+}; /*END mapDispatchToProps1 */
+
+const KgetRequestUserNameConnect1 = connect(mapStateToProps1, mapDispatchToProps1) (KgetRequestUserNameComponent1);
+
+
+	/******/
+	/*index.js file*/
+	/******/
+const {createStore, applyMiddleware} = Redux;
+const {Provider} = ReactRedux;
+
+const iKstore = createStore(
+	iKreducer1,
+	applyMiddleware(ReduxThunk.default) /*9+*/
+); /*END iKstore */ /*10+*/
+
+ReactDOM.render(
+	<Provider store={iKstore}>
+		<App />
+	</Provider>,
+	document.getElementById('root')
+); /*END ReactDOM.render */
+
+/*1+ redux-thunk library is very small.
+2+ VIP redux-thunk will halt dispatching the action creator and give you back control. It will determine if it is a returning object or a function.
+	+\ VIP Because of redux-thunk, your action creator can return either a object literal or anonymous function.
+	+\ if it is an object literal (action) than redux-thunk will let the action creator continue to be dispatch to the reducer as normal.
+		+\ So basically you can write normal action creator as you normally would do if you do not need to use redux-thunk.
+	+\ VIP If the action creator returns an anonymous function than you would need to use the anonymous function iKdispatchP() argument to dispatch the final object literal (action).
+		+\ This is part of the redux-thunk structure and is a must, especially if you are using asynchronous codes.
+		+\ iKgetStateP() argument allows you to gain access to the current redux store if you need to use, but it is optional.
+2+ I used async function as part of getting the GET request.
+	+\ BIM if I did not use the redux-thunk library, the action creator would send an error 'Error: Actions must be plain objects. Use custom middleware for async actions' .
+		+\ That is because babel library cannot convert react-redux asynchronous http request accordingly.
+			+\ babel would return the request response and not the action object literal you are seeking for.
+			+\ But redux-thunk pauses the dispatch to the reducer and lets you dispatch when the request is fully finish.
+3+ VIP you must insert the action (object literal) within the iKdispatch() , with its 'type' property as usual and any optionally payload property.
+4+ calling and dispatching the action creator with the asynchronous codes to the redux reducer and store.
+5+ There are three props: iKDispatchActionCreator1() / iKstoreStateProps / iKownProps .
+6+ VIP you must include a conditional statement for the initial state otherwise error will occur in the first react render.
+7+ mapDispatchToProps allows you to wrap multiple action creator within dispatch, for more convenience.
+7+ iKownProps is optional.
+8+ BIM to use iKdispatch() , you must wrap it wihin a anonymous function.
+	+\ alternatively you could use bindActionCreators() .
+9+ VIP To use Redux-thunk , you must insert it within the redux applyMiddleware() method.
+9+ BIM for spa you do not need to use .default for ReduxThunk property, it is just for html project.
+10+ iK you will notice I did not use the redux devtool extension.
+	+\ iK You would need to follow the redux devtool addional codes in their documentation to use it along with middleware.
+		+\ iK check online or your word doc for details. */
+
+ /*OP */
+/* **** d */
+/*--------------------- /script /////////////////////////*/ /* 
+	IK.printD( html );
+	IK.everyStyles( DOMelement );
+	IK.ascii("a", "b");
+	IK.patternIndexNumber( iKarray, searchThisValue );
+	IK.cssSupport("cssProperty", "cssValue");
+	IK.listAttributes( DOMnode );
+	IK.serialize( formDOMelement );
+	IK.serializeObject( iKobject );
+	IK.cloneObject( iKobject );
+	IK.fetchJson( apiUrlP );
+
+const iKvar1 = "iKV1";
+const iKarray1 = ["iKaV1", "iKaV2", "iKaV3"];
+const iKobject1 = {iKoProperty1: "iKoV1", iKoProperty2: "iKoV2", iKoProperty3: "iKoV3"};
+const iKmap1 = new Map([ ["iKmapProp1", "iKmapV1"], ["iKmapProp2", "iKmapV2"], ["iKmapProp3", "iKmapV3"] ]);
+const iKset1 = new Set([ "iKsetV1", "iKsetV2", "iKsetV3" ]);
+const iKconsFunction1 = function ( {iKpar1, iKpar2, iKpar3} = {} ) {
+	this.iKconsFuncProp1 = iKpar1 || "iKdefaultPar1";
+	this.iKconsFuncProp2 = iKpar2 || "iKdefaultPar2";
+	this.iKconsFuncProp3 = iKpar3 || "iKdefaultPar3";
+};
+	const iKconsObject1 = new iKconsFunction1();
+const iKasyncFunction1 = async () => {
+	try {
+		const iKpromise1 = await new Promise(function(resolve, reject) {
+		});
+		return iKpromise1;
+	} catch(iKcatchError1) {
+		throw new Error("iKerror >>> ", iKcatchError1);
+	};
+};
+	iKasyncFunction1();	*/
+</script>
+</main>
+</body>
+</html>
